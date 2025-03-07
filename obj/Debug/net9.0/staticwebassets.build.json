@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "06sXOZnhPElSxW/pbQJnC/cUHpj2knFn1wpjdWyuZls=",
+  "Source": "ActivoFijoAPI",
+  "BasePath": "_content/ActivoFijoAPI",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

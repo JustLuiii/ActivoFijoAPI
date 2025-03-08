@@ -26,7 +26,7 @@ export const MainSidebar = () => {
                     title: 'DashBoard',
                     icon: LayoutDashboard,
                     href: "/",
-                    isActive: pathname?.startsWith("/")
+                    isActive: pathname?.endsWith("/")
                 }
             ]
         },

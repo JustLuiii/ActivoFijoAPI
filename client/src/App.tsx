@@ -1,13 +1,18 @@
-import { Button } from "@/components/ui/button"
-import { ModeToggle } from "./components/modeToggle"
+// import { Button } from "@/components/ui/button"
+// import { ModeToggle } from "./components/modeToggle"
+
+import { Route, Routes } from "react-router"
+import { RootLayout } from "./layout/root-layout"
+import { DashBoardPage } from "./pages/dashboard-page"
 
 function App() {
   return (
     <>
-    <ModeToggle />
-    <div className="flex flex-col items-center justify-center min-h-svh">
-      <Button>Click me</Button>
-    </div>
+      <Routes>
+        <Route path="/" element={<RootLayout />}>
+          <Route index element={<DashBoardPage />} />
+        </Route>
+      </Routes>
     </>
   )
 }

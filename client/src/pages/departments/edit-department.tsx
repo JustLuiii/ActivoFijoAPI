@@ -8,7 +8,6 @@ export const EditDepartment = () => {
 
     const { id } = useParams<{ id: string }>();
 
-
     return (
         <div className="space-y-6">
             <div className="flex items-center gap-4">

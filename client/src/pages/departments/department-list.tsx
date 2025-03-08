@@ -1,5 +1,3 @@
-"use client"
-
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
@@ -17,14 +15,15 @@ import {
 } from "@/components/ui/alert-dialog"
 import { useState } from "react"
 import { Link } from "react-router"
+import { Badge } from "@/components/ui/badge"
 
 // Mock data
 const departments = [
-    { id: 1, name: "Recursos Humanos", description: "Gestión de personal", employees: 12 },
-    { id: 2, name: "Finanzas", description: "Contabilidad y finanzas", employees: 8 },
-    { id: 3, name: "Tecnología", description: "Soporte técnico e infraestructura", employees: 15 },
-    { id: 4, name: "Marketing", description: "Publicidad y relaciones públicas", employees: 7 },
-    { id: 5, name: "Operaciones", description: "Logística y operaciones", employees: 20 },
+    { id: 1, description: "Gestión de personal", activo: true },
+    { id: 2, description: "Contabilidad y finanzas", activo: true },
+    { id: 3, description: "Soporte técnico e infraestructura", activo: false },
+    { id: 4, description: "Publicidad y relaciones públicas", activo: true },
+    { id: 5, description: "Logística y operaciones", activo: true },
 ]
 
 export const DepartmentList = () => {
@@ -54,13 +53,13 @@ export const DepartmentList = () => {
                     <CardDescription>Lista de departamentos registrados en el sistema</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <Table>
+                    <Table className="table-auto w-auto max-w-full min-w-3xl">
                         <TableHeader>
                             <TableRow>
                                 <TableHead>ID</TableHead>
-                                <TableHead>Nombre</TableHead>
+                                {/* <TableHead>Nombre</TableHead> */}
                                 <TableHead className="hidden md:table-cell">Descripción</TableHead>
-                                {/* <TableHead>Empleados</TableHead> */}
+                                <TableHead className="text-center">Estado</TableHead>
                                 <TableHead className="text-right">Acciones</TableHead>
                             </TableRow>
                         </TableHeader>
@@ -68,9 +67,14 @@ export const DepartmentList = () => {
                             {departmentsList.map((department) => (
                                 <TableRow key={department.id}>
                                     <TableCell>{department.id}</TableCell>
-                                    <TableCell className="font-medium">{department.name}</TableCell>
+                                    {/* <TableCell className="font-medium">{department.name}</TableCell> */}
                                     <TableCell className="hidden md:table-cell">{department.description}</TableCell>
                                     {/* <TableCell>{department.employees}</TableCell> */}
+                                    <TableCell className="text-center">
+                                        <Badge variant={department.activo ? "default" : "destructive"}>
+                                            {department.activo ? "Activo" : "Inactivo"}
+                                        </Badge>
+                                    </TableCell>
                                     <TableCell className="text-right">
                                         <div className="flex justify-end gap-2">
                                             <Button variant="ghost" size="icon" asChild>

@@ -1,0 +1,6 @@
+@ActivoFijoAPI_HostAddress = http://localhost:5268
+
+GET {{ActivoFijoAPI_HostAddress}}/api/Documentacion/
+Accept: application/json
+
+###

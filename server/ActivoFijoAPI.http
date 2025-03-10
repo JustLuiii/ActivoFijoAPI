@@ -4,3 +4,5 @@ GET {{ActivoFijoAPI_HostAddress}}/api/Documentacion/
 Accept: application/json
 
 ###
+GET {{ActivoFijoAPI_HostAddress}}/api/Departamentos/
+Accept: application/json

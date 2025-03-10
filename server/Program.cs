@@ -1,7 +1,18 @@
+using ActivoFijoAPI.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Habilitar servicios de controladores
 builder.Services.AddControllers();
+
+// Configuracion DB
+var connectionString =
+    builder.Configuration.GetConnectionString("DefaultConnection")
+        ?? throw new InvalidOperationException("Connection string"
+        + "'DefaultConnection' not found.");
+
+builder.Services.AddDbContext<ApplicationDbContext>(option => option.UseSqlServer(connectionString));
 
 // Configurar Swagger para documentación de API
 builder.Services.AddEndpointsApiExplorer();

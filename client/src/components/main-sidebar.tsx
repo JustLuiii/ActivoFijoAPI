@@ -1,4 +1,4 @@
-import { Building2, Users, Boxes, Package, LayoutDashboard } from "lucide-react"
+import { Package } from "lucide-react"
 
 import {
     Sidebar,
@@ -13,54 +13,13 @@ import {
     SidebarRail,
 } from "@/components/ui/sidebar"
 import { Link, useLocation } from "react-router"
+import { optionsSideBar } from "@/constants/routers";
 
 export const MainSidebar = () => {
 
     const pathname = useLocation().pathname;
 
-    const navItems = [
-        {
-            title: '',
-            items: [
-                {
-                    title: 'DashBoard',
-                    icon: LayoutDashboard,
-                    href: "/",
-                    isActive: pathname?.endsWith("/")
-                }
-            ]
-        },
-        {
-            title: "Gestión",
-            items: [
-                {
-                    title: "Departamentos",
-                    icon: Building2,
-                    href: "/departments",
-                    isActive: pathname?.startsWith("/departments"),
-                },
-                {
-                    title: "Empleados",
-                    icon: Users,
-                    href: "/employees",
-                    isActive: pathname?.startsWith("/employees"),
-                },
-                {
-                    title: "Tipos de Activos",
-                    icon: Boxes,
-                    href: "/asset-types",
-                    isActive: pathname?.startsWith("/asset-types"),
-                },
-                {
-                    title: "Activos Fijos",
-                    icon: Package,
-                    href: "/assets",
-                    isActive: pathname?.startsWith("/assets"),
-                },
-            ],
-        },
-
-    ]
+    const navItems = optionsSideBar(pathname);
 
     return (
         <Sidebar>

@@ -6,7 +6,7 @@ import { DEV, VITE_VERSION_API } from '@/constants/configs';
 
 const baseQuery = fetchBaseQuery({
   baseUrl: DEV ? VITE_VERSION_API : 'http://localhost:3000/api/',
-  credentials: 'include',
+  // credentials: 'include',
 });
 
 const baseQueryWithReauth = async (args: BaseQueryArgs['args'], api: BaseQueryArgs['api'], extraOptions: BaseQueryArgs['extraOptions']) => {

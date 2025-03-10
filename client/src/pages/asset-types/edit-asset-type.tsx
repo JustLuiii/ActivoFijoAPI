@@ -12,7 +12,7 @@ export const EditAssetType = () => {
         <div className="space-y-6">
             <div className="flex items-center gap-4">
                 <Button variant="outline" size="icon" asChild>
-                    <Link to="/employees" replace>
+                    <Link to="/asset-types" replace>
                         <ArrowLeft className="h-4 w-4" />
                         <span className="sr-only">Volver</span>
                     </Link>

@@ -12,10 +12,10 @@ import { EmployeesPage } from "./pages/employees/employees-page"
 import { EmployeesList } from "./pages/employees/employees-list"
 import { NewEmployee } from "./pages/employees/new-employee"
 import { EditEmployee } from "./pages/employees/edit-employee"
-import { AssetTypeForm } from "./components/asset-type-form"
 import { AssetTypesList } from "./pages/asset-types/asset-types-list"
 import { NewAssetType } from "./pages/asset-types/new-asset-type"
 import { EditAssetType } from "./pages/asset-types/edit-asset-type"
+import { AssetTypesPage } from "./pages/asset-types/asset-types-page"
 
 function App() {
   return (
@@ -33,7 +33,7 @@ function App() {
             <Route path="new" element={<NewEmployee />} />
             <Route path=":id/edit" element={<EditEmployee />} />
           </Route>
-          <Route path="asset-types" element={<AssetTypeForm />}>
+          <Route path="asset-types" element={<AssetTypesPage />}>
             <Route index element={<AssetTypesList />} />
             <Route path="new" element={<NewAssetType />} />
             <Route path=":id/edit" element={<EditAssetType />} />

@@ -16,6 +16,10 @@ import { AssetTypesList } from "./pages/asset-types/asset-types-list"
 import { NewAssetType } from "./pages/asset-types/new-asset-type"
 import { EditAssetType } from "./pages/asset-types/edit-asset-type"
 import { AssetTypesPage } from "./pages/asset-types/asset-types-page"
+import { AssetsPage } from "./pages/assets/assets-page"
+import { AssetsList } from "./pages/assets/assets-list"
+import { NewAsset } from "./pages/assets/new-asset"
+import { EditAsset } from "./pages/assets/edit-asset"
 
 function App() {
   return (
@@ -37,6 +41,11 @@ function App() {
             <Route index element={<AssetTypesList />} />
             <Route path="new" element={<NewAssetType />} />
             <Route path=":id/edit" element={<EditAssetType />} />
+          </Route>
+          <Route path="assets" element={<AssetsPage />}>
+            <Route index element={<AssetsList />} />
+            <Route path="new" element={<NewAsset />} />
+            <Route path=":id/edit" element={<EditAsset />} />
           </Route>
         </Route>
       </Routes>

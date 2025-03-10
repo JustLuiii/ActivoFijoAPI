@@ -1,4 +1,4 @@
-import { AssetTypeForm } from "@/components/asset-type-form"
+import { AssetForm } from "@/components/asset-form"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft } from "lucide-react"
 import { Link } from "react-router"
@@ -19,7 +19,7 @@ export const NewAsset = () => {
                 </div>
             </div>
             <div className="xs:w-full w-2xl">
-                <AssetTypeForm />
+                <AssetForm />
             </div>
         </div>
     )

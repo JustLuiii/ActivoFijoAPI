@@ -1,4 +1,4 @@
-import { AssetTypeForm } from "@/components/asset-type-form"
+import { AssetForm } from "@/components/asset-form"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft } from "lucide-react"
 import { useParams } from "react-router"
@@ -23,7 +23,7 @@ export const EditAsset = () => {
                 </div>
             </div>
             <div className="xs:w-full w-2xl">
-                <AssetTypeForm id={id} />
+                <AssetForm id={id} />
             </div>
         </div>
     )

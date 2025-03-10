@@ -46,7 +46,7 @@ export const AssetsList = () => {
                     <p className="text-muted-foreground">Gestione los activos fijos de la organización</p>
                 </div>
                 <Button asChild>
-                    <Link to="/-assets/new" replace>
+                    <Link to="/assets/new" replace>
                         <PlusCircle className="mr-2 h-4 w-4" />
                         Nuevo Activo Fijo
                     </Link>
@@ -86,7 +86,7 @@ export const AssetsList = () => {
                                     <TableCell className="text-right">
                                         <div className="flex justify-end gap-2">
                                             <Button variant="ghost" size="icon" asChild>
-                                                <Link to={`/-assets/${asset.id}/edit`}>
+                                                <Link to={`/assets/${asset.id}/edit`}>
                                                     <Edit className="h-4 w-4" />
                                                     <span className="sr-only">Editar</span>
                                                 </Link>

@@ -72,7 +72,7 @@ export const AssetForm = ({ id }: AssetFormProps) => {
         console.log("Form submitted:", formData)
         // Aquí normalmente enviarías los datos a tu backend
 
-        navigate("/-assets")
+        navigate("/assets")
     }
 
     return (
@@ -188,7 +188,7 @@ export const AssetForm = ({ id }: AssetFormProps) => {
                     </div>
                 </CardContent>
                 <CardFooter className="flex justify-between">
-                    <Button variant="outline" type="button" onClick={() => navigate("/-assets", { replace: true })}>
+                    <Button variant="outline" type="button" onClick={() => navigate("/assets", { replace: true })}>
                         Cancelar
                     </Button>
                     <Button type="submit">{id ? "Actualizar" : "Crear"} Activo Fijo</Button>

@@ -1,54 +1,103 @@
-# React + TypeScript + Vite
+# 📌 Gestión de Activos
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![Portada del Proyecto](client/src/assets/portada.png)
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🏆 Insignias
 
-## Expanding the ESLint configuration
+![Estado del Proyecto](https://img.shields.io/badge/Estado-En%20Desarrollo-yellow)
+![Licencia](https://img.shields.io/badge/Licencia-MIT-blue)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## 📑 Índice
+
+1. [Descripción del Proyecto](#-descripción-del-proyecto)
+2. [Estado del Proyecto](#-estado-del-proyecto)
+3. [Demostración de funciones y aplicaciones](#-demostración-de-funciones-y-aplicaciones)
+4. [Acceso al Proyecto](#-acceso-al-proyecto)
+5. [Tecnologías utilizadas](#-tecnologías-utilizadas)
+6. [Personas Contribuyentes](#-personas-contribuyentes)
+7. [Personas Desarrolladoras del Proyecto](#-personas-desarrolladoras-del-proyecto)
+8. [Licencia](#-licencia)
+
+---
+
+## 📌 Descripción del Proyecto
+
+El **Sistema de Gestión de Activos** es una plataforma diseñada para facilitar el seguimiento, control y administración de activos dentro de una organización. Permite la gestión eficiente de activos físicos y digitales, optimizando el uso de los recursos y asegurando su mantenimiento adecuado.
+
+---
+
+## 🚀 Estado del Proyecto
+
+📌 **En Desarrollo**
+
+Actualmente, el proyecto está en fase de desarrollo. Se están implementando las funcionalidades principales y realizando pruebas de integración.
+
+---
+
+## 🎥 Demostración de funciones y aplicaciones
+
+🔹 **Registro y seguimiento de activos**
+🔹 **Asignación de activos a usuarios o departamentos**
+🔹 **Mantenimiento y control de estado**
+🔹 **Reportes y análisis de uso**
+
+> 📽 Próximamente: Se incluirán capturas de pantalla y un video demostrativo.
+
+---
+
+## 🔗 Acceso al Proyecto
+
+Puedes acceder al código fuente del proyecto en el siguiente enlace:
+
+🔗 [Repositorio en GitHub](https://github.com/JustLuiii/ActivoFijoAPI.git)
+
+Para clonar el proyecto localmente:
+```sh
+  git clone https://github.com/JustLuiii/ActivoFijoAPI.git
+  cd ActivoFijoAPI
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- **web:** 
+  ```sh
+      cd ./client
+      npm install
+      npm run dev
+  ```
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+---
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+## 🛠 Tecnologías utilizadas
+
+- **Frontend:** React, Redux Toolkit, TypeScript, TailwindCSS, Shadcn/ui
+- **Backend:** .NET, Entity Framework
+- **Base de Datos:** SQL Server
+- **Autenticación:** JWT
+- **Control de Versiones:** Git y GitHub
+
+---
+
+## 👥 Personas Contribuyentes
+
+💡 Agradecemos la participación de todas las personas que han contribuido al desarrollo del proyecto. Si deseas colaborar, ¡eres bienvenido/a!
+
+---
+
+## 👨‍💻👩‍💻 Personas Desarrolladoras del Proyecto
+
+- **dalvinxo** - [GitHub](https://github.com/dalvinxo)
+- **Nombre del Desarrollador 2** - [GitHub](https://github.com/usuario2)
+
+---
+
+## 📜 Licencia
+
+Este proyecto está bajo la Licencia MIT. Consulta el archivo `LICENSE` para más detalles.
+
+---
+
+🚀 _¡Gracias por tu interés en el proyecto!_
+

@@ -1,7 +1,7 @@
 import { Boxes, Building2, LayoutDashboard, Package, Users } from "lucide-react";
 
 
-export const optionsSideBar = (pathname: string) => ([
+export const OPTION_SIDE_BAR = (pathname: string) => ([
     {
         title: '',
         items: [

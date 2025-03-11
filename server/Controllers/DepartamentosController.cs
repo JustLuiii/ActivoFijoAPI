@@ -57,8 +57,11 @@ namespace ActivoFijoAPI.Controllers
         {
             var departamento = await _context.Departamentos.FindAsync(id);
             if (departamento == null) return NotFound();
-            _context.Departamentos.Remove(departamento);
+            departamento.Activo = !departamento.Activo;
+            _context.Entry(departamento).State = EntityState.Modified;
             await _context.SaveChangesAsync();
+            //_context.Departamentos.Remove(departamento);
+            //await _context.SaveChangesAsync();
             return NoContent();
         }
     }

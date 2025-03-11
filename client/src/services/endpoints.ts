@@ -1,9 +1,9 @@
 export const endpoints = {
     departments: {
-        getAll: 'departments',
-        getById: (id: number) => `departments/${id}`,
-        post: 'departments',
-        update: (id: number) => `departments/${id}`,
-        delete: (id: number) => `departments/${id}`
+        getAll: 'departamentos',
+        getById: (id: number) => `departamentos/${id}`,
+        post: 'departamentos',
+        update: (id?: number) => `departamentos/${id}`,
+        delete: (id?: number) => `departamentos/${id}`
     }
 }

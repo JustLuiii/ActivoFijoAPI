@@ -13,13 +13,13 @@ import {
     SidebarRail,
 } from "@/components/ui/sidebar"
 import { Link, useLocation } from "react-router"
-import { optionsSideBar } from "@/constants/routers";
+import { OPTION_SIDE_BAR } from "@/constants/routers";
 
 export const MainSidebar = () => {
 
     const pathname = useLocation().pathname;
 
-    const navItems = optionsSideBar(pathname);
+    const navItems = OPTION_SIDE_BAR(pathname);
 
     return (
         <Sidebar>

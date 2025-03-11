@@ -1,21 +1,28 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Edit, PlusCircle, Trash2 } from "lucide-react";
+import { Edit, PlusCircle, ShieldCheck, ShieldMinus } from "lucide-react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Link } from "react-router";
 import { Badge } from "@/components/ui/badge";
-import { useGetAllDepartmentsQuery } from "@/features/departments/departmentsApiSlice";
+import { useGetAllDepartmentsQuery, useDeleteDepartmentsMutation } from "@/features/departments/departmentsApiSlice";
 import { UILoading } from "@/components/ui-loading";
 import { UIError } from "@/components/ui-error";
 
 export const DepartmentList = () => {
-    const { data = [], isLoading, isFetching, isError } = useGetAllDepartmentsQuery(undefined, {
+    const { data = [], isLoading, isFetching, isError, refetch } = useGetAllDepartmentsQuery(undefined, {
         refetchOnMountOrArgChange: true
     });
 
-    const handleDelete = (id: number) => {
-        console.log(`Eliminando departamento con ID: ${id}`);
+    const [deleteDepartment, { isLoading: isDeleting }] = useDeleteDepartmentsMutation();
+
+    const handleDelete = async (id: number) => {
+        try {
+            await deleteDepartment(id).unwrap();
+            refetch();
+        } catch (error) {
+            console.error("Error eliminando departamento", error);
+        }
     };
 
     return (
@@ -42,7 +49,7 @@ export const DepartmentList = () => {
                     {isLoading || isFetching ? (
                         <UILoading variant="skeleton" count={5} />
                     ) : isError ? (
-                        <UIError />
+                        <UIError onRetry={refetch} />
                     ) : (
                         <Table className="table-auto w-auto max-w-full min-w-3xl">
                             <TableHeader>
@@ -73,21 +80,23 @@ export const DepartmentList = () => {
                                                 </Button>
                                                 <AlertDialog>
                                                     <AlertDialogTrigger asChild>
-                                                        <Button variant="ghost" size="icon">
-                                                            <Trash2 className="h-4 w-4" />
-                                                            <span className="sr-only">Eliminar</span>
+                                                        <Button variant="ghost" size="icon" disabled={isDeleting}>
+                                                            {department.activo ? <ShieldMinus className="h-4 w-4" /> : <ShieldCheck className="h-4 w-4" />}
+                                                            <span className="sr-only">{department.activo ? 'Desactivar' : 'Activar'} </span>
                                                         </Button>
                                                     </AlertDialogTrigger>
                                                     <AlertDialogContent>
                                                         <AlertDialogHeader>
                                                             <AlertDialogTitle>¿Está seguro?</AlertDialogTitle>
                                                             <AlertDialogDescription>
-                                                                Esta acción no se puede deshacer. Esto eliminará permanentemente el departamento y todos los datos asociados.
+                                                                Esto {department.activo ? 'inhabilitara' : 'habilitara'} permanentemente el departamento y todos los datos asociados.
                                                             </AlertDialogDescription>
                                                         </AlertDialogHeader>
                                                         <AlertDialogFooter>
                                                             <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                                                            <AlertDialogAction onClick={() => handleDelete(department.id)}>Eliminar</AlertDialogAction>
+                                                            <AlertDialogAction onClick={() => handleDelete(department.id)} disabled={isDeleting}>
+                                                                {isDeleting ? 'Enviado...' : department.activo ? 'Desactivar' : 'Activar'}
+                                                            </AlertDialogAction>
                                                         </AlertDialogFooter>
                                                     </AlertDialogContent>
                                                 </AlertDialog>

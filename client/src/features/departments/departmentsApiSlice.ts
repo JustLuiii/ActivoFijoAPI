@@ -29,6 +29,12 @@ export const departmentsApiSlice = apiSlice.injectEndpoints({
         }
       },
     }),
+    deleteDepartments: builder.mutation<void, number>({
+      query: (id) => ({
+        url: endpoints.departments.delete(id),
+        method: 'DELETE'
+      })
+    })
   }),
 });
 
@@ -36,5 +42,6 @@ export const {
   useGetAllDepartmentsQuery,
   useGetByIdDepartmentsQuery,
   useCreateDepartmentsMutation,
-  useUpdateDepartmentsMutation
+  useUpdateDepartmentsMutation,
+  useDeleteDepartmentsMutation
 } = departmentsApiSlice;

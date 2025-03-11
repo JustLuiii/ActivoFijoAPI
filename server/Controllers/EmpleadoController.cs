@@ -23,7 +23,7 @@ namespace ActivoFijoAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Empleado>>> GetEmpleados()
         {
-            return await _context.Empleados.ToListAsync();
+            return await _context.Empleados.Include(x=> x.Departamento).ToListAsync();
         }
 
         // GET: api/Empleados/5
@@ -42,6 +42,8 @@ namespace ActivoFijoAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Empleado>> PostEmpleado(Empleado empleado)
         {
+            if (EmpleadoCedulaIsReady(empleado.Cedula)) return BadRequest();
+
             _context.Empleados.Add(empleado);
             await _context.SaveChangesAsync();
             return CreatedAtAction("GetEmpleado", new { id = empleado.Id }, empleado);
@@ -87,7 +89,9 @@ namespace ActivoFijoAPI.Controllers
                 return NotFound();
             }
 
-            _context.Empleados.Remove(empleado);
+            //_context.Empleados.Remove(empleado);
+            empleado.Activo = !empleado.Activo;
+            _context.Entry(empleado).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -96,6 +100,11 @@ namespace ActivoFijoAPI.Controllers
         private bool EmpleadoExists(int id)
         {
             return _context.Empleados.Any(e => e.Id == id);
+        }
+
+        private bool EmpleadoCedulaIsReady(string cedula)
+        {
+            return _context.Empleados.Any(e => e.Cedula == cedula);
         }
     }
 }

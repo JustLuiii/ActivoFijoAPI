@@ -10,3 +10,7 @@ Accept: application/json
 ###
 GET {{ActivoFijoAPI_HostAddress}}/api/departamentos/1
 Accept: application/json
+
+###
+GET {{ActivoFijoAPI_HostAddress}}/api/empleados
+Accept: application/json

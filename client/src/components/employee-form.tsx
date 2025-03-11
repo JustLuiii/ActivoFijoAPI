@@ -1,113 +1,167 @@
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useEffect, useState } from "react"
-import { useNavigate } from "react-router"
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
+import { InputMask } from "@react-input/mask";
 
-const employeeData = {
-    "1": {
-        id: 1,
-        nombre: "Juan Pérez",
-        cedula: "001-2345678-9",
-        departamento: "Recursos Humanos",
-        tipo_persona: 1, // Físico
-        fecha_ingreso: "2020-01-15",
-        activo: true
-    }
-}
+import { useCreateEmployeesMutation, useUpdateEmployeesMutation, useLazyGetByIdEmployeesQuery } from "@/features/employees/employeesApiSlice";
+import { UIError } from "@/components/ui-error";
+import { UILoading } from "@/components/ui-loading";
+import { useGetAllDepartmentsQuery } from "@/features/departments/departmentsApiSlice";
+import { CheckDocument } from "@/utils/check-document";
+import { TEmpleadoForm } from "@/features/employees/employeesTypes";
+import { useEffect } from "react";
 
-type EmployeeFormProps = {
-    id?: string
+
+
+interface EmployeeFormProps {
+    id?: string;
 }
 
 export const EmployeeForm = ({ id }: EmployeeFormProps) => {
-    const navigate = useNavigate()
-    const [formData, setFormData] = useState({
-        nombre: "",
-        cedula: "",
-        departamento: "",
-        tipo_persona: 1, // Físico por defecto
-        fecha_ingreso: "",
-        activo: true
-    })
+
+    const navigate = useNavigate();
+    const employeeId = Number(id);
+
+    const { register, handleSubmit, setValue, getValues, reset, formState: { errors } } = useForm<TEmpleadoForm>({
+        defaultValues: {
+            nombre: "",
+            cedula: "",
+            departamentoId: "",
+            tipoPersona: "",
+            fechaIngreso: "",
+            activo: true
+        }
+    });
+
+    const { data: departments = [], isLoading: isLoadingDepartments, isError: isDepartmentsError } = useGetAllDepartmentsQuery(undefined, { refetchOnMountOrArgChange: true });
+
+    const [fetchEmployee, { isFetching, isError }] = useLazyGetByIdEmployeesQuery();
 
     useEffect(() => {
-        if (id && employeeData[id as keyof typeof employeeData]) {
-            const employee = employeeData[id as keyof typeof employeeData]
-            setFormData({
-                nombre: employee.nombre,
-                cedula: employee.cedula,
-                departamento: employee.departamento,
-                tipo_persona: employee.tipo_persona,
-                fecha_ingreso: employee.fecha_ingreso,
-                activo: employee.activo
-            })
+        if (id) {
+            fetchEmployee(parseInt(id))
+                .unwrap()
+                .then((data) => {
+                    console.log(data);
+                    setValue('nombre', data.nombre);
+                    setValue('id', data.id);
+                    setValue('tipoPersona', data.tipoPersona.toString());
+                    setValue('departamentoId', data.departamentoId.toString());
+                    setValue('cedula', data.cedula);
+                    setValue('activo', data.activo);
+                    setValue('fechaIngreso', new Date(data.fechaIngreso).toISOString().split('T')[0]);
+                });
         }
-    }, [id])
+    }, [id, reset]);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const { name, value } = e.target
-        setFormData((prev) => ({ ...prev, [name]: value }))
-    }
+    const [createEmployee, { isError: isCreateError }] = useCreateEmployeesMutation();
+    const [updateEmployee, { isError: isUpdateError }] = useUpdateEmployeesMutation();
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault()
+    if (isFetching) return <UILoading variant="spinner" />;
 
-        console.log("Form submitted:", formData)
-        // Aquí normalmente enviarías los datos a tu backend
+    const onSubmit = async (data: Partial<TEmpleadoForm>) => {
 
-        navigate("/employees")
-    }
+        try {
+
+            if (id) {
+                console.log(data);
+                await updateEmployee({ id: employeeId, ...data, activo: data?.activo }).unwrap();
+            } else {
+                await createEmployee({ ...data, activo: true }).unwrap();
+            }
+
+            navigate("/employees");
+        } catch (err) {
+            console.error("Error al guardar el empleado", err);
+        }
+    };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
             <Card>
                 <CardHeader>
-                    <CardTitle>Información del Empleado</CardTitle>
+                    <CardTitle>{id ? "Editar Empleado" : "Crear Empleado"}</CardTitle>
                     <CardDescription>Complete la información requerida para el empleado</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <div className="space-y-2">
                         <Label htmlFor="nombre">Nombre</Label>
-                        <Input
-                            id="nombre"
-                            name="nombre"
-                            placeholder="Nombre del empleado"
-                            value={formData.nombre}
-                            onChange={handleChange}
-                            required
-                        />
+                        <Input id="nombre" {...register("nombre", { required: "El nombre es obligatorio" })} placeholder="Nombre del empleado" />
+                        {errors.nombre && <p className="text-red-500 text-sm">{errors.nombre.message}</p>}
                     </div>
+
                     <div className="space-y-2">
-                        <Label htmlFor="cedula">Cédula</Label>
-                        <Input
+                        <Label htmlFor="cedula">
+                            Cédula
+                        </Label>
+                        <InputMask
+                            mask="999-9999999-9"
+                            replacement={{ 9: /\d/ }}
                             id="cedula"
-                            name="cedula"
-                            placeholder="Cédula del empleado"
-                            value={formData.cedula}
-                            onChange={handleChange}
-                            required
+                            {...register("cedula", {
+                                required: "La cédula es obligatoria.",
+                                pattern: {
+                                    value: /^\d{3}-\d{7}-\d{1}$/,
+                                    message: "El formato debe ser ###-#######-#",
+                                },
+                                validate: CheckDocument,
+                            })}
+                            placeholder="000-0000000-0"
+                            className="input border border-gray-300 rounded-md p-2 w-full"
                         />
+                        {errors.cedula && <p className="text-red-500 text-sm">{errors.cedula.message}</p>}
                     </div>
+
                     <div className="space-y-2">
                         <Label htmlFor="departamento">Departamento</Label>
-                        <Input
-                            id="departamento"
-                            name="departamento"
-                            placeholder="Departamento"
-                            value={formData.departamento}
-                            onChange={handleChange}
-                            required
-                        />
+                        {isLoadingDepartments ? (
+                            <UILoading variant="spinner" />
+                        ) : isDepartmentsError ? (
+                            <UIError title="Error" description="No se pudieron cargar los departamentos." variant="alert" />
+                        ) : (
+                            <Select
+                                {...register("departamentoId", {
+                                    required: "El departamento es obligatorio",
+                                    min: {
+                                        value: 1,
+                                        message: "Debe seleccionar un departamento"
+                                    }
+                                })}
+                                defaultValue={getValues("departamentoId")}
+                                onValueChange={(value) => setValue("departamentoId", value, { shouldValidate: true })}
+                            >
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Seleccione un departamento" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {departments.map((department) => (
+                                        <SelectItem key={department.id} value={department.id.toString()}>
+                                            {department.descripcion}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        )}
+                        {errors.departamentoId && <p className="text-red-500 text-sm">{errors.departamentoId.message}</p>}
                     </div>
+
                     <div className="space-y-2">
-                        <Label htmlFor="tipo_persona">Tipo de Persona</Label>
+                        <Label htmlFor="tipoPersona">Tipo de Persona</Label>
                         <Select
-                            name="tipo_persona"
-                            value={formData.tipo_persona.toString()}
-                            onValueChange={(value) => setFormData((prev) => ({ ...prev, tipo_persona: parseInt(value) }))}
+                            {...register("tipoPersona", {
+                                required: "El departamento es obligatorio",
+                                min: {
+                                    value: 1,
+                                    message: "Debe seleccionar un departamento"
+                                }
+                            })}
+                            defaultValue={getValues("tipoPersona")}
+                            // value={getValues("tipoPersona") ? getValues("tipoPersona").toString() : ""}
+                            onValueChange={(value) => setValue("tipoPersona", value, { shouldValidate: true })}
                         >
                             <SelectTrigger>
                                 <SelectValue placeholder="Seleccione tipo de persona" />
@@ -118,34 +172,26 @@ export const EmployeeForm = ({ id }: EmployeeFormProps) => {
                             </SelectContent>
                         </Select>
                     </div>
+
                     <div className="space-y-2">
-                        <Label htmlFor="fecha_ingreso">Fecha de Ingreso</Label>
-                        <Input
-                            id="fecha_ingreso"
-                            name="fecha_ingreso"
-                            type="date"
-                            value={formData.fecha_ingreso}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="activo">Estado</Label>
-                        <Select
-                            name="activo"
-                            value={formData.activo ? "1" : "0"}
-                            onValueChange={(value: string) => setFormData((prev) => ({ ...prev, activo: value === "1" }))}
-                        >
-                            <SelectTrigger>
-                                <SelectValue placeholder="Seleccione estado" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="1">Activo</SelectItem>
-                                <SelectItem value="0">Inactivo</SelectItem>
-                            </SelectContent>
-                        </Select>
+                        <Label htmlFor="fechaIngreso">Fecha de Ingreso</Label>
+                        <Input id="fechaIngreso" type="date" {...register("fechaIngreso", {
+                            required: "La fecha de ingreso es obligatoria",
+                            validate: value => {
+                                const today = new Date().toISOString().split('T')[0];
+                                return value <= today || "La fecha de ingreso no puede ser mayor que la fecha de hoy.";
+                            }
+                        })} />
+                        {errors.fechaIngreso && <p className="text-red-500 text-sm">{errors.fechaIngreso.message}</p>}
                     </div>
                 </CardContent>
+
+                {(isError || isCreateError || isUpdateError) && (
+                    <CardContent>
+                        <UIError title="Error" description="No se pudo guardar el empleado." variant="alert" />
+                    </CardContent>
+                )}
+
                 <CardFooter className="flex justify-between">
                     <Button variant="outline" type="button" onClick={() => navigate("/employees", { replace: true })}>
                         Cancelar
@@ -154,5 +200,5 @@ export const EmployeeForm = ({ id }: EmployeeFormProps) => {
                 </CardFooter>
             </Card>
         </form>
-    )
-}
+    );
+};

@@ -14,5 +14,7 @@ namespace ActivoFijoAPI.Models
         [Column("fecha_ingreso")]
         public DateTime FechaIngreso { get; set; }
         public bool Activo { get; set; }
+
+        public virtual Departamento? Departamento { get; set; }
     }
 }

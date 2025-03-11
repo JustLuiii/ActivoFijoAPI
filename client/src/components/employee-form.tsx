@@ -58,7 +58,7 @@ export const EmployeeForm = ({ id }: EmployeeFormProps) => {
         }
     }, [id, reset]);
 
-    const [createEmployee, { isError: isCreateError }] = useCreateEmployeesMutation();
+    const [createEmployee, { isError: isCreateError, error }] = useCreateEmployeesMutation();
     const [updateEmployee, { isError: isUpdateError }] = useUpdateEmployeesMutation();
 
     if (isFetching) return <UILoading variant="spinner" />;
@@ -80,6 +80,7 @@ export const EmployeeForm = ({ id }: EmployeeFormProps) => {
         }
     };
 
+    console.log(error);
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <Card>
@@ -121,7 +122,7 @@ export const EmployeeForm = ({ id }: EmployeeFormProps) => {
                         {isLoadingDepartments ? (
                             <UILoading variant="spinner" />
                         ) : isDepartmentsError ? (
-                            <UIError title="Error" description="No se pudieron cargar los departamentos." variant="alert" />
+                            <UIError title="Error" description={"Existe empleado con este ID"} variant="alert" />
                         ) : (
                             <Select
                                 {...register("departamentoId", {

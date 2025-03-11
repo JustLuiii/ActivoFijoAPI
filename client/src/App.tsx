@@ -20,11 +20,16 @@ import { AssetsPage } from "./pages/assets/assets-page"
 import { AssetsList } from "./pages/assets/assets-list"
 import { NewAsset } from "./pages/assets/new-asset"
 import { EditAsset } from "./pages/assets/edit-asset"
+import { AuthLayout } from "./layout/auth-layout"
+import LoginPage from "./pages/auth/login-page"
 
 function App() {
   return (
     <>
       <Routes>
+        <Route path="/auth" element={<AuthLayout />}>
+          <Route index element={<LoginPage />} />
+        </Route>
         <Route path="/" element={<RootLayout />}>
           <Route index element={<DashBoardPage />} />
           <Route path="departments" element={<DepartmentsPage />}>

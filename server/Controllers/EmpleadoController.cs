@@ -42,7 +42,7 @@ namespace ActivoFijoAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Empleado>> PostEmpleado(Empleado empleado)
         {
-            if (EmpleadoCedulaIsReady(empleado.Cedula)) return BadRequest();
+            if (EmpleadoCedulaIsReady(empleado.Cedula)) return BadRequest("Existe empleado con esta cédula");
 
             _context.Empleados.Add(empleado);
             await _context.SaveChangesAsync();

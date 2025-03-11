@@ -87,7 +87,9 @@ namespace ActivoFijoAPI.Controllers
                 return NotFound();
             }
 
-            _context.TiposActivos.Remove(tipoActivo);
+            //_context.TiposActivos.Remove(tipoActivo);
+            tipoActivo.Activo = !tipoActivo.Activo;
+            _context.Entry(tipoActivo).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 
             return NoContent();

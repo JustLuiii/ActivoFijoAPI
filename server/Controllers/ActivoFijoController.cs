@@ -92,8 +92,11 @@ namespace ActivoFijoAPI.Controllers
             {
                 return NotFound();
             }
-
-            _context.ActivosFijos.Remove(activoFijo);
+            byte inactivo = 0;
+            byte operativo = 1;
+            //_context.ActivosFijos.Remove(activoFijo);
+            activoFijo.Estado = activoFijo.Estado == inactivo ? operativo : inactivo;
+            _context.Entry(activoFijo).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 
             return NoContent();

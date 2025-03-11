@@ -2,61 +2,72 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { useNavigate } from "react-router"
-
-const assetTypeData = {
-    "1": {
-        id: 1,
-        descripcion: "Computadora",
-        cuenta_contable_compra: "101-001",
-        cuenta_contable_depreciacion: "301-001",
-        activo: true,
-    }
-}
+import { useForm } from "react-hook-form"
+import { IAssetTypes } from "@/features/asset-types/assetTypesTypes"
+import { useCreateAssetTypesMutation, useLazyGetByIdAssetTypesQuery, useUpdateAssetTypesMutation } from "@/features/asset-types/assetTypesApiSlice"
+import { UILoading } from "./ui-loading"
+import { UIError } from "./ui-error"
 
 type AssetTypeFormProps = {
     id?: string
 }
 
 export const AssetTypeForm = ({ id }: AssetTypeFormProps) => {
-    const navigate = useNavigate()
-    const [formData, setFormData] = useState({
-        descripcion: "",
-        cuenta_contable_compra: "",
-        cuenta_contable_depreciacion: "",
-        activo: true,
-    })
+
+    const navigate = useNavigate();
+    const employeeId = Number(id);
+
+    const { register, handleSubmit, setValue, formState: { errors } } = useForm<IAssetTypes>({
+        defaultValues: {
+            cuentaContableCompra: "",
+            cuentaContableDepreciacion: "",
+            descripcion: "",
+            activo: true
+        }
+    });
+
+    const [fetchAssetTypes, { isFetching, isError }] = useLazyGetByIdAssetTypesQuery();
 
     useEffect(() => {
-        if (id && assetTypeData[id as keyof typeof assetTypeData]) {
-            const asset = assetTypeData[id as keyof typeof assetTypeData]
-            setFormData({
-                descripcion: asset.descripcion,
-                cuenta_contable_compra: asset.cuenta_contable_compra,
-                cuenta_contable_depreciacion: asset.cuenta_contable_depreciacion,
-                activo: asset.activo,
-            })
+        if (id) {
+            fetchAssetTypes(parseInt(id))
+                .unwrap()
+                .then((data) => {
+                    setValue('cuentaContableCompra', data.cuentaContableCompra);
+                    setValue('cuentaContableDepreciacion', data.cuentaContableDepreciacion);
+                    setValue('id', data.id);
+                    setValue('activo', data.activo);
+                    setValue('descripcion', data.descripcion);
+                });
         }
-    }, [id])
+    }, [id]);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value } = e.target
-        setFormData((prev) => ({ ...prev, [name]: value }))
-    }
+    const [createAssetTypes, { isError: isCreateError }] = useCreateAssetTypesMutation();
+    const [updateAssetTypes, { isError: isUpdateError }] = useUpdateAssetTypesMutation();
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault()
+    if (isFetching) return <UILoading variant="spinner" />;
 
-        console.log("Form submitted:", formData)
-        // Aquí normalmente enviarías los datos a tu backend
+    const onSubmit = async (data: Partial<IAssetTypes>) => {
 
-        navigate("/asset-types")
-    }
+        try {
+
+            if (id) {
+                console.log(data);
+                await updateAssetTypes({ id: employeeId, ...data, activo: data?.activo }).unwrap();
+            } else {
+                await createAssetTypes({ ...data, activo: true }).unwrap();
+            }
+
+            navigate("/asset-types");
+        } catch (err) {
+            console.error("Error al guardar el empleado", err);
+        }
+    };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
             <Card>
                 <CardHeader>
                     <CardTitle>Información del Tipo de Activo</CardTitle>
@@ -67,56 +78,49 @@ export const AssetTypeForm = ({ id }: AssetTypeFormProps) => {
                         <Label htmlFor="descripcion">Descripción</Label>
                         <Input
                             id="descripcion"
-                            name="descripcion"
                             placeholder="Descripción del tipo de activo"
-                            value={formData.descripcion}
-                            onChange={handleChange}
-                            required
+                            {...register("descripcion", { required: "La descripción es obligatoria" })}
                         />
+                        {errors.descripcion && <span className="text-red-500">{errors.descripcion.message}</span>}
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor="cuenta_contable_compra">Cuenta Contable de Compra</Label>
+                        <Label htmlFor="cuentaContableCompra">Cuenta Contable de Compra</Label>
                         <Input
-                            id="cuenta_contable_compra"
-                            name="cuenta_contable_compra"
-                            placeholder="Cuenta contable de compra"
-                            value={formData.cuenta_contable_compra}
-                            onChange={handleChange}
-                            required
+                            id="cuentaContableCompra"
+                            placeholder="Ejemplo: 101-001"
+                            {...register("cuentaContableCompra", {
+                                required: "La cuenta contable es obligatoria",
+                                // pattern: {
+                                //     value: /^\d{3}-\d{3}$/,
+                                //     message: "Formato inválido (Ejemplo: 101-001)",
+                                // },
+                            })}
                         />
+                        {errors.cuentaContableCompra && <span className="text-red-500">{errors.cuentaContableCompra.message}</span>}
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor="cuenta_contable_depreciacion">Cuenta Contable de Depreciación</Label>
+                        <Label htmlFor="cuentaContableDepreciacion">Cuenta Contable de Depreciación</Label>
                         <Input
-                            id="cuenta_contable_depreciacion"
-                            name="cuenta_contable_depreciacion"
-                            placeholder="Cuenta contable de depreciación"
-                            value={formData.cuenta_contable_depreciacion}
-                            onChange={handleChange}
-                            required
+                            id="cuentaContableDepreciacion"
+                            placeholder="Ejemplo: 301-001"
+                            {...register("cuentaContableDepreciacion", {
+                                required: "La cuenta contable de depreciación es obligatoria",
+                                // pattern: {
+                                //     value: /^\d{3}-\d{3}$/,
+                                //     message: "Formato inválido (Ejemplo: 301-001)",
+                                // },
+                            })}
                         />
-                    </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="activo">Estado</Label>
-                        <Select
-                            name="activo"
-                            value={formData.activo ? "1" : "0"}
-                            onValueChange={(value) => setFormData((prev) => ({ ...prev, activo: value === "1" }))}
-                        >
-                            <SelectTrigger>
-                                <SelectValue placeholder="Seleccione estado" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="1">Activo</SelectItem>
-                                <SelectItem value="0">Inactivo</SelectItem>
-                            </SelectContent>
-                        </Select>
+                        {errors.cuentaContableDepreciacion && <span className="text-red-500">{errors.cuentaContableDepreciacion.message}</span>}
                     </div>
                 </CardContent>
+                {(isError || isCreateError || isUpdateError) && (
+                    <CardContent>
+                        <UIError title="Error" description="No se pudo guardar el empleado." variant="alert" />
+                    </CardContent>
+                )}
                 <CardFooter className="flex justify-between">
-                    <Button variant="outline" type="button" onClick={() => navigate("/asset-types", { replace: true })}>
-                        Cancelar
-                    </Button>
+                    <Button variant="outline" type="button" onClick={() => navigate("/asset-types")}>Cancelar</Button>
                     <Button type="submit">{id ? "Actualizar" : "Crear"} Tipo de Activo</Button>
                 </CardFooter>
             </Card>

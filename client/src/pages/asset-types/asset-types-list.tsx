@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Edit, PlusCircle, Trash2 } from "lucide-react"
+import { Edit, PlusCircle, ShieldCheck, ShieldMinus } from "lucide-react"
 import {
     AlertDialog,
     AlertDialogAction,
@@ -13,105 +13,103 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { useState } from "react"
 import { Link } from "react-router"
 import { Badge } from "@/components/ui/badge"
-
-// Ejemplo de datos simulados para tipo de activo
-const assetTypes = [
-    {
-        id: 1,
-        descripcion: "Computadora",
-        cuenta_contable_compra: "101-001",
-        cuenta_contable_depreciacion: "301-001",
-        activo: true,
-    }
-]
+import { useDeleteAssetTypesMutation, useGetAllAssetTypesQuery } from "@/features/asset-types/assetTypesApiSlice"
+import { UILoading } from "@/components/ui-loading"
+import { UIError } from "@/components/ui-error"
 
 export const AssetTypesList = () => {
-    const [assetTypesList, setAssetTypesList] = useState(assetTypes)
 
-    const handleDelete = (id: number) => {
-        setAssetTypesList(assetTypesList.filter((asset) => asset.id !== id))
-    }
+    const { data = [], isLoading, isFetching, isError, refetch } = useGetAllAssetTypesQuery();
+    const [deleteAssetType, { isLoading: isDeleting }] = useDeleteAssetTypesMutation();
+
+    const handleDelete = async (id: number) => {
+        try {
+            await deleteAssetType(id).unwrap();
+            refetch();
+        } catch (error) {
+            console.error("Error eliminando tipo de activo", error);
+        }
+    };
 
     return (
         <>
             <div className="flex items-center justify-between">
-                <div>
-                    <h1 className="text-3xl font-bold tracking-tight">Tipos de Activo</h1>
-                    <p className="text-muted-foreground">Gestione los tipos de activo de la organización</p>
-                </div>
+                <h1 className="text-3xl font-bold tracking-tight">Tipos de Activos</h1>
                 <Button asChild>
-                    <Link to="/asset-types/new" replace>
-                        <PlusCircle className="mr-2 h-4 w-4" />
-                        Nuevo Tipo de Activo
+                    <Link to="/asset-types/new">
+                        <PlusCircle className="mr-2 h-4 w-4" /> Nuevo Tipo de Activo
                     </Link>
                 </Button>
             </div>
             <Card>
                 <CardHeader>
-                    <CardTitle>Tipos de Activo</CardTitle>
-                    <CardDescription>Lista de tipos de activo registrados en el sistema</CardDescription>
+                    <CardTitle>Tipos de Activos</CardTitle>
+                    <CardDescription>Lista de tipos de activos registrados</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <Table className="table-auto w-auto max-w-full min-w-3xl">
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>ID</TableHead>
-                                <TableHead>Descripción</TableHead>
-                                <TableHead className="hidden md:table-cell">Cuenta Compra</TableHead>
-                                <TableHead className="hidden md:table-cell">Cuenta Depreciación</TableHead>
-                                <TableHead className="text-center">Estado</TableHead>
-                                <TableHead className="text-right">Acciones</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {assetTypesList.map((asset) => (
-                                <TableRow key={asset.id}>
-                                    <TableCell>{asset.id}</TableCell>
-                                    <TableCell className="font-medium">{asset.descripcion}</TableCell>
-                                    <TableCell className="hidden md:table-cell">{asset.cuenta_contable_compra}</TableCell>
-                                    <TableCell className="hidden md:table-cell">{asset.cuenta_contable_depreciacion}</TableCell>
-                                    <TableCell className="text-center">
-                                        <Badge variant={asset.activo ? "default" : "destructive"}>
-                                            {asset.activo ? "Activo" : "Inactivo"}
-                                        </Badge>
-                                    </TableCell>
-                                    <TableCell className="text-right">
-                                        <div className="flex justify-end gap-2">
+                    {isLoading || isFetching ? (
+                        <UILoading variant="skeleton" count={5} />
+                    ) : isError ? (
+                        <UIError onRetry={refetch} />
+                    ) : (
+                        <Table className="table-auto w-auto max-w-full min-w-3xl">
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>ID</TableHead>
+                                    <TableHead className="hidden md:table-cell">Descripción</TableHead>
+                                    <TableHead className="hidden md:table-cell">Cuenta de Compra</TableHead>
+                                    <TableHead className="hidden md:table-cell">Cuenta de Depreciación</TableHead>
+                                    <TableHead className="text-center">Estado</TableHead>
+                                    <TableHead className="text-right">Acciones</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {data.map((type) => (
+                                    <TableRow key={type.id}>
+                                        <TableCell>{type.id}</TableCell>
+                                        <TableCell>{type.descripcion}</TableCell>
+                                        <TableCell>{type.cuentaContableCompra}</TableCell>
+                                        <TableCell>{type.cuentaContableDepreciacion}</TableCell>
+                                        <TableCell className="text-center">
+                                            <Badge variant={type.activo ? "default" : "destructive"}>
+                                                {type.activo ? "Activo" : "Inactivo"}
+                                            </Badge>
+                                        </TableCell>
+                                        <TableCell className="text-right">
                                             <Button variant="ghost" size="icon" asChild>
-                                                <Link to={`/asset-types/${asset.id}/edit`}>
+                                                <Link to={`/asset-types/${type.id}/edit`}>
                                                     <Edit className="h-4 w-4" />
-                                                    <span className="sr-only">Editar</span>
                                                 </Link>
                                             </Button>
                                             <AlertDialog>
                                                 <AlertDialogTrigger asChild>
-                                                    <Button variant="ghost" size="icon">
-                                                        <Trash2 className="h-4 w-4" />
-                                                        <span className="sr-only">Eliminar</span>
+                                                    <Button variant="ghost" size="icon" disabled={isDeleting}>
+                                                        {type.activo ? <ShieldMinus className="h-4 w-4" /> : <ShieldCheck className="h-4 w-4" />}
                                                     </Button>
                                                 </AlertDialogTrigger>
                                                 <AlertDialogContent>
                                                     <AlertDialogHeader>
                                                         <AlertDialogTitle>¿Está seguro?</AlertDialogTitle>
                                                         <AlertDialogDescription>
-                                                            Esta acción no se puede deshacer. Esto eliminará permanentemente el tipo de activo.
+                                                            Esto {type.activo ? 'desactivará' : 'activará'} el tipo de activo.
                                                         </AlertDialogDescription>
                                                     </AlertDialogHeader>
                                                     <AlertDialogFooter>
                                                         <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                                                        <AlertDialogAction onClick={() => handleDelete(asset.id)}>Eliminar</AlertDialogAction>
+                                                        <AlertDialogAction onClick={() => handleDelete(type.id)} disabled={isDeleting}>
+                                                            {isDeleting ? 'En proceso...' : type.activo ? 'Desactivar' : 'Activar'}
+                                                        </AlertDialogAction>
                                                     </AlertDialogFooter>
                                                 </AlertDialogContent>
                                             </AlertDialog>
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    )}
                 </CardContent>
             </Card>
         </>

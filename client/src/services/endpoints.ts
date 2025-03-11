@@ -13,5 +13,19 @@ export const endpoints = {
         update: (id?: number) => `empleados/${id}`,
         delete: (id?: number) => `empleados/${id}`
     },
+    assetTypes: {
+        getAll: 'tiposActivos',
+        getById: (id: number) => `tiposActivos/${id}`,
+        post: 'tiposActivos',
+        update: (id?: number) => `tiposActivos/${id}`,
+        delete: (id?: number) => `tiposActivos/${id}`
+    },
+    assets: {
+        getAll: 'activosfijos',
+        getById: (id: number) => `activosfijos/${id}`,
+        post: 'activosfijos',
+        update: (id?: number) => `activosfijos/${id}`,
+        delete: (id?: number) => `activosfijos/${id}`
+    }
 
 }

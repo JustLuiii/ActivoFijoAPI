@@ -18,3 +18,7 @@ Accept: application/json
 ###
 GET {{ActivoFijoAPI_HostAddress}}/api/tiposActivos
 Accept: application/json
+
+###
+GET {{ActivoFijoAPI_HostAddress}}/api/activosfijos
+Accept: application/json

@@ -18,10 +18,15 @@ import { Badge } from "@/components/ui/badge"
 import { useDeleteAssetsMutation, useGetAllAssetsQuery } from "@/features/assets/assetsApiSlice"
 import { UILoading } from "@/components/ui-loading"
 import { UIError } from "@/components/ui-error"
+import { FormatCurrency } from "@/utils/format-currency"
+import { FormatDate } from "@/utils/format-date"
 
 export const AssetsList = () => {
 
-    const { data = [], isLoading, isFetching, isError, refetch } = useGetAllAssetsQuery();
+    const { data = [], isLoading, isFetching, isError, refetch } = useGetAllAssetsQuery(undefined, {
+        refetchOnMountOrArgChange: true
+    });
+
     const [deleteAsset, { isLoading: isDeleting }] = useDeleteAssetsMutation();
 
     const handleDelete = async (id: number) => {
@@ -71,9 +76,9 @@ export const AssetsList = () => {
                                     <TableRow key={asset.id}>
                                         <TableCell>{asset.id}</TableCell>
                                         <TableCell className="font-medium">{asset.descripcion}</TableCell>
-                                        <TableCell className="hidden md:table-cell">{asset.depreciacionAcumulada}</TableCell>
-                                        <TableCell className="hidden md:table-cell">{asset.fechaAdquisicion}</TableCell>
-                                        <TableCell className="hidden md:table-cell">{asset.valor}</TableCell>
+                                        <TableCell className="hidden md:table-cell">{FormatCurrency({ value: asset.depreciacionAcumulada })}</TableCell>
+                                        <TableCell className="hidden md:table-cell">{FormatDate(asset.fechaAdquisicion)}</TableCell>
+                                        <TableCell className="hidden md:table-cell">{FormatCurrency({ value: asset.valor })}</TableCell>
                                         <TableCell className="text-center">
                                             <Badge variant={asset.estado == 1 ? "default" : asset.estado == 2 ? "outline" : asset.estado == 3 ? "secondary" : "destructive"}>
                                                 {asset.estado == 1 ? "Operativo" : asset.estado == 2 ? "En Mantenimiento" : asset.estado == 3 ? "Baja" : "Inactivo"}

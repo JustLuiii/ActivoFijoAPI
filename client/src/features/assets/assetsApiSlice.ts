@@ -1,6 +1,6 @@
 import { apiSlice } from '@/services/apiSlice';
 import { endpoints } from '@/services/endpoints';
-import { IAssets } from './assetsTypes';
+import { IAssets, IAssetsForm } from './assetsTypes';
 
 export const assetsApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -10,7 +10,7 @@ export const assetsApiSlice = apiSlice.injectEndpoints({
     getByIdAssets: builder.query<IAssets, number>({
       query: (id) => endpoints.assets.getById(id),
     }),
-    createAssets: builder.mutation<IAssets, Partial<IAssets>>({
+    createAssets: builder.mutation<IAssets, Partial<IAssetsForm>>({
       query: (body) => {
         return {
           url: endpoints.assets.post,
@@ -19,7 +19,7 @@ export const assetsApiSlice = apiSlice.injectEndpoints({
         }
       }
     }),
-    updateAssets: builder.mutation<IAssets, Partial<IAssets>>({
+    updateAssets: builder.mutation<IAssets, Partial<IAssetsForm>>({
       query(data) {
         const { id } = data
         return {
@@ -41,6 +41,7 @@ export const assetsApiSlice = apiSlice.injectEndpoints({
 export const {
   useGetAllAssetsQuery,
   useGetByIdAssetsQuery,
+  useLazyGetByIdAssetsQuery,
   useCreateAssetsMutation,
   useUpdateAssetsMutation,
   useDeleteAssetsMutation

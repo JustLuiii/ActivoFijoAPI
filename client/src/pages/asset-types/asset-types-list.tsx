@@ -21,7 +21,11 @@ import { UIError } from "@/components/ui-error"
 
 export const AssetTypesList = () => {
 
-    const { data = [], isLoading, isFetching, isError, refetch } = useGetAllAssetTypesQuery();
+    const { data = [], isLoading, isFetching, isError, refetch } = useGetAllAssetTypesQuery(undefined,
+        {
+            refetchOnMountOrArgChange: true
+        }
+    );
     const [deleteAssetType, { isLoading: isDeleting }] = useDeleteAssetTypesMutation();
 
     const handleDelete = async (id: number) => {

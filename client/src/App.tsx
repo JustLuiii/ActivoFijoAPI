@@ -22,35 +22,42 @@ import { NewAsset } from "./pages/assets/new-asset"
 import { EditAsset } from "./pages/assets/edit-asset"
 import { AuthLayout } from "./layout/auth-layout"
 import LoginPage from "./pages/auth/login-page"
+import SignupPage from "./pages/auth/signup-page"
 
 function App() {
   return (
     <>
       <Routes>
-        <Route path="/auth" element={<AuthLayout />}>
+        {/* <Route path="/auth" element={<AuthLayout />}>
           <Route index element={<LoginPage />} />
-        </Route>
-        <Route path="/" element={<RootLayout />}>
-          <Route index element={<DashBoardPage />} />
-          <Route path="departments" element={<DepartmentsPage />}>
-            <Route index element={<DepartmentList />} />
-            <Route path="new" element={<NewDeparment />} />
-            <Route path=":id/edit" element={<EditDepartment />} />
+        </Route> */}
+        <Route path="/">
+          <Route element={<AuthLayout />}>
+            <Route path="login" element={<LoginPage />} />
+            <Route path="signup" element={<SignupPage />} />
           </Route>
-          <Route path="employees" element={<EmployeesPage />}>
-            <Route index element={<EmployeesList />} />
-            <Route path="new" element={<NewEmployee />} />
-            <Route path=":id/edit" element={<EditEmployee />} />
-          </Route>
-          <Route path="asset-types" element={<AssetTypesPage />}>
-            <Route index element={<AssetTypesList />} />
-            <Route path="new" element={<NewAssetType />} />
-            <Route path=":id/edit" element={<EditAssetType />} />
-          </Route>
-          <Route path="assets" element={<AssetsPage />}>
-            <Route index element={<AssetsList />} />
-            <Route path="new" element={<NewAsset />} />
-            <Route path=":id/edit" element={<EditAsset />} />
+          <Route element={<RootLayout />}>
+            <Route index element={<DashBoardPage />} />
+            <Route path="departments" element={<DepartmentsPage />}>
+              <Route index element={<DepartmentList />} />
+              <Route path="new" element={<NewDeparment />} />
+              <Route path=":id/edit" element={<EditDepartment />} />
+            </Route>
+            <Route path="employees" element={<EmployeesPage />}>
+              <Route index element={<EmployeesList />} />
+              <Route path="new" element={<NewEmployee />} />
+              <Route path=":id/edit" element={<EditEmployee />} />
+            </Route>
+            <Route path="asset-types" element={<AssetTypesPage />}>
+              <Route index element={<AssetTypesList />} />
+              <Route path="new" element={<NewAssetType />} />
+              <Route path=":id/edit" element={<EditAssetType />} />
+            </Route>
+            <Route path="assets" element={<AssetsPage />}>
+              <Route index element={<AssetsList />} />
+              <Route path="new" element={<NewAsset />} />
+              <Route path=":id/edit" element={<EditAsset />} />
+            </Route>
           </Route>
         </Route>
       </Routes>

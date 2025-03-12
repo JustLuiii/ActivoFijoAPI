@@ -28,7 +28,14 @@ export function SignupForm() {
 
     const password = form.watch("password");
 
-    async function onSubmit(data) {
+    interface FormData {
+        username: string;
+        email: string;
+        password: string;
+        confirmPassword: string;
+    }
+
+    async function onSubmit(data: FormData) {
         if (data.password !== data.confirmPassword) {
             form.setError("confirmPassword", { type: "manual", message: "Las contraseñas no coinciden" });
             return;
@@ -39,7 +46,7 @@ export function SignupForm() {
             toast({ title: "Registro exitoso", description: "Su cuenta ha sido creada correctamente", variant: "default" });
             navigate("/login");
         } catch (error) {
-            console.error(error)
+            console.error(error);
             toast({ title: "Error de registro", description: "No se pudo crear la cuenta. Por favor intente nuevamente.", variant: "destructive" });
         } finally {
             setIsLoading(false);

@@ -78,15 +78,15 @@ export const PasswordStrengthIndicator = ({ password }: PasswordStrengthIndicato
                 <p className="text-xs text-muted-foreground">La contraseña debe cumplir con:</p>
                 <ul className="grid grid-cols-1 md:grid-cols-2 gap-1 text-xs">
                     {passwordRequirements.map((requirement, index) => {
-                        const isFulfilled = requirement.regex.test(password)
+                        const isFullFilled = requirement.regex.test(password)
                         return (
                             <li key={index} className="flex items-center gap-2">
-                                {isFulfilled ? (
+                                {isFullFilled ? (
                                     <Check className="h-3.5 w-3.5 text-green-500" />
                                 ) : (
                                     <X className="h-3.5 w-3.5 text-muted-foreground" />
                                 )}
-                                <span className={cn(isFulfilled ? "text-foreground" : "text-muted-foreground")}>
+                                <span className={cn(isFullFilled ? "text-foreground" : "text-muted-foreground")}>
                                     {requirement.text}
                                 </span>
                             </li>

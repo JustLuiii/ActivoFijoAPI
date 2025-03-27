@@ -1,13 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ActivoFijoAPI.Models;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ActivoFijoAPI.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ActivoFijoAPI.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ActivosFijosController : ControllerBase

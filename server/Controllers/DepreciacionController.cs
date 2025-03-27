@@ -1,11 +1,13 @@
 ﻿using ActivoFijoAPI.Data;
 using ActivoFijoAPI.Models;
 using ActivoFijoAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace ActivoFijoAPI.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class DepreciacionController : ControllerBase

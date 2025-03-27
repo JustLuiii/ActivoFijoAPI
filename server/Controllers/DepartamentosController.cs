@@ -2,9 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ActivoFijoAPI.Data;
 using ActivoFijoAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ActivoFijoAPI.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class DepartamentosController : ControllerBase

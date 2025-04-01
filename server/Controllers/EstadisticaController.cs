@@ -3,16 +3,19 @@ using ActivoFijoAPI.Models;
 using ActivoFijoAPI.Data;
 using ActivoFijoAPI.DTOs;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ActivoFijoAPI.Controllers
 {
+
     [Route("api/[controller]")]
     [ApiController]
-    public class DocumentacionController : ControllerBase
+    [Authorize]
+    public class EstadisticaController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public DocumentacionController(ApplicationDbContext context)
+        public EstadisticaController(ApplicationDbContext context)
         {
             _context = context;
         }

@@ -1,16 +1,18 @@
 using Microsoft.AspNetCore.Mvc;
 using ActivoFijoAPI.Models;
 using ActivoFijoAPI.Data;
+using ActivoFijoAPI.DTOs;
+using Microsoft.EntityFrameworkCore;
 
 namespace ActivoFijoAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EstadisticaController : ControllerBase
+    public class DocumentacionController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public EstadisticaController(ApplicationDbContext context)
+        public DocumentacionController(ApplicationDbContext context)
         {
             _context = context;
         }

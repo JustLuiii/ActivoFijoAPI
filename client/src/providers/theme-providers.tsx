@@ -1,3 +1,4 @@
+import { Toaster } from "@/components/ui/sonner"
 import { createContext, useContext, useEffect, useState } from "react"
 
 type Theme = "dark" | "light" | "system"
@@ -58,6 +59,7 @@ export function ThemeProvider({
 
   return (
     <ThemeProviderContext.Provider {...props} value={value}>
+      <Toaster />
       {children}
     </ThemeProviderContext.Provider>
   )

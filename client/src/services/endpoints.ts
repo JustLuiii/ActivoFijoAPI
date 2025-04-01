@@ -1,4 +1,9 @@
 export const endpoints = {
+    authentication: {
+        getAll: 'authentication',
+        login: `authentication/login`,
+        post: 'authentication/registrar',
+    },
     departments: {
         getAll: 'departamentos',
         getById: (id: number) => `departamentos/${id}`,

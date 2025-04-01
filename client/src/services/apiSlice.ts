@@ -6,30 +6,29 @@ import { DEV, VITE_VERSION_API } from '@/constants/configs';
 
 const baseQuery = fetchBaseQuery({
   baseUrl: DEV ? VITE_VERSION_API : 'http://localhost:3000/api/',
-  // credentials: 'include',
+  prepareHeaders: (headers) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      headers.set('Authorization', `Bearer ${token}`);
+    }
+    return headers;
+  }
 });
 
 const baseQueryWithReauth = async (args: BaseQueryArgs['args'], api: BaseQueryArgs['api'], extraOptions: BaseQueryArgs['extraOptions']) => {
   const result = await baseQuery(args, api, extraOptions);
 
   try {
-    // if (result.error) {
-    //     const user = api.getState().auth?.user;
 
-    //   if (error.status === 401) {
-    //       await baseQuery(endpoints.auth?.logout, api, extraOptions);
+    if (result.error && result.error.status === 401) {
+      console.warn("Token inválido o expirado");
+      localStorage.removeItem("token");
+      localStorage.removeItem("email");
+    }
 
-    //     if (user) {
-    //       await baseQuery(endpoints.auth.logout, api, extraOptions);
-    //       window.location.reload();
-    //       api.dispatch(logOut({}));
-    //     }
-    //   }
-    // }
+    return result;
   } catch (error) {
     console.error(error);
-    window.location.reload();
-    // api.dispatch(logOut({}));
   }
 
   return result;

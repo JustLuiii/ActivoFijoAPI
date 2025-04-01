@@ -6,12 +6,15 @@ import { Form, FormControl, FormItem, FormLabel, FormMessage } from "@/component
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useNavigate } from "react-router";
+import { useLoginMutation } from "@/features/authentication/authenticationApiSlice";
 import { useToast } from "@/hooks/use-toast";
 
 export function LoginForm() {
     const navigate = useNavigate();
-    const [isLoading, setIsLoading] = useState(false);
+    // const [isLoading, setIsLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+
+    const [login, { isLoading }] = useLoginMutation()
 
     const { toast } = useToast();
 
@@ -23,12 +26,17 @@ export function LoginForm() {
         },
     });
 
-    async function onSubmit(data) {
-        setIsLoading(true);
+
+    //josePerez@@11
+    //josePerez@gmail.com
+    async function onSubmit(data: { identifier: string; password: string; }) {
+        // setIsLoading(true);
 
         try {
-            await new Promise((resolve) => setTimeout(resolve, 1500));
-            console.log("Login data:", data);
+            const response = await login({ email: data.identifier, password: data.password }).unwrap();
+
+            localStorage.setItem("token", response.token);
+            localStorage.setItem("email", response.email);
 
             toast({
                 title: "Inicio de sesión exitoso",
@@ -44,8 +52,6 @@ export function LoginForm() {
                 description: "Credenciales incorrectas. Por favor intente nuevamente.",
                 variant: "destructive",
             });
-        } finally {
-            setIsLoading(false);
         }
     }
 

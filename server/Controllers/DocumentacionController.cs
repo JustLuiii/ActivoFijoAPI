@@ -6,16 +6,16 @@ namespace ActivoFijoAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DocumentacionController : ControllerBase
+    public class EstadisticaController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public DocumentacionController(ApplicationDbContext context)
+        public EstadisticaController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/Documentacion
+        // GET: api/Estadistica
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ActivoFijo>>> GetDocumentacion()
         {

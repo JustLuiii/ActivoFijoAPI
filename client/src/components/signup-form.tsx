@@ -8,13 +8,16 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { PasswordStrengthIndicator } from "@/components/password-strength-indicator";
 import { useNavigate } from "react-router";
+import { useCreateUsersMutation } from "@/features/authentication/authenticationApiSlice";
 
 export function SignupForm() {
     const navigate = useNavigate();
     const { toast } = useToast();
-    const [isLoading, setIsLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+
+    const [createUser, { isLoading }] = useCreateUsersMutation();
 
     const form = useForm({
         defaultValues: {
@@ -40,16 +43,22 @@ export function SignupForm() {
             form.setError("confirmPassword", { type: "manual", message: "Las contraseñas no coinciden" });
             return;
         }
-        setIsLoading(true);
+
+
         try {
-            await new Promise((resolve) => setTimeout(resolve, 1500));
+
+            const response = await createUser({ email: data.email, idSistemaAuxiliar: 9, nombre: data.username, password: password }).unwrap();
+
+            console.log("response", response)
+            // localStorage.setItem("token", response.token);
+            // localStorage.setItem("email", response.email);
+            // localStorage.setItem("nombre", response.nombre);
+
             toast({ title: "Registro exitoso", description: "Su cuenta ha sido creada correctamente", variant: "default" });
             navigate("/login");
         } catch (error) {
             console.error(error);
             toast({ title: "Error de registro", description: "No se pudo crear la cuenta. Por favor intente nuevamente.", variant: "destructive" });
-        } finally {
-            setIsLoading(false);
         }
     }
 
@@ -63,7 +72,7 @@ export function SignupForm() {
                     pattern: { value: /^[a-zA-Z0-9_]+$/, message: "Solo se permiten letras, números y guiones bajos" }
                 }} render={({ field }) => (
                     <FormItem>
-                        <FormLabel>Nombre de Usuario</FormLabel>
+                        <FormLabel>Nombre del Usuario</FormLabel>
                         <FormControl>
                             <Input placeholder="Ingrese un nombre de usuario" {...field} disabled={isLoading} autoComplete="username" />
                         </FormControl>
@@ -86,7 +95,7 @@ export function SignupForm() {
 
                 <FormField control={form.control} name="password" rules={{
                     required: "La contraseña es obligatoria",
-                    minLength: { value: 8, message: "Debe tener al menos 8 caracteres" },
+                    minLength: { value: 6, message: "Debe tener al menos 8 caracteres" },
                     validate: {
                         hasUpperCase: (value) => /[A-Z]/.test(value) || "Debe contener al menos una letra mayúscula",
                         hasLowerCase: (value) => /[a-z]/.test(value) || "Debe contener al menos una letra minúscula",

@@ -11,6 +11,8 @@ export const Navbar = () => {
   const navigate = useNavigate();
 
   const handleOnCerrarSession = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("email");
     navigate('/login', { replace: true })
   }
 

@@ -1,7 +1,11 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { useGetAllStadisticQuery } from "@/features/stadistic/StadisticApiSlice"
 import { Boxes, Building2, Package, Users } from "lucide-react"
 
 export const DashBoardPage = () => {
+
+    const { data } = useGetAllStadisticQuery();
+
 
     return (
         <div className="space-y-6">
@@ -17,7 +21,7 @@ export const DashBoardPage = () => {
                         <Building2 className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">12</div>
+                        <div className="text-2xl font-bold">{data?.departamentos}</div>
                         <p className="text-xs text-muted-foreground">Departamentos registrados</p>
                     </CardContent>
                 </Card>
@@ -27,7 +31,7 @@ export const DashBoardPage = () => {
                         <Users className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">145</div>
+                        <div className="text-2xl font-bold">{data?.empleados}</div>
                         <p className="text-xs text-muted-foreground">Empleados registrados</p>
                     </CardContent>
                 </Card>
@@ -37,7 +41,7 @@ export const DashBoardPage = () => {
                         <Boxes className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">8</div>
+                        <div className="text-2xl font-bold">{data?.tipoActivos}</div>
                         <p className="text-xs text-muted-foreground">Categorías de activos</p>
                     </CardContent>
                 </Card>
@@ -47,7 +51,7 @@ export const DashBoardPage = () => {
                         <Package className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">324</div>
+                        <div className="text-2xl font-bold">{data?.activosFijos}</div>
                         <p className="text-xs text-muted-foreground">Activos registrados</p>
                     </CardContent>
                 </Card>

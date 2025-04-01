@@ -18,6 +18,9 @@ export const endpoints = {
         update: (id?: number) => `empleados/${id}`,
         delete: (id?: number) => `empleados/${id}`
     },
+    stadistic: {
+        getAll: `estadistica`
+    },
     assetTypes: {
         getAll: 'tiposActivos',
         getById: (id: number) => `tiposActivos/${id}`,

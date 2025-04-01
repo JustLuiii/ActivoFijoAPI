@@ -13,6 +13,9 @@ using System.Net.Http;
 
 namespace ActivoFijoAPI.Controllers
 {
+
+    [Route("api/[controller]")]
+    [ApiController]
     public class AuthenticationController : ControllerBase
     {
         private readonly ApplicationDbContext _context;

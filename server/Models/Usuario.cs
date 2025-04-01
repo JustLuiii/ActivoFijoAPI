@@ -2,7 +2,7 @@
 
 namespace ActivoFijoAPI.Models
 {
-    [Table("ususario")]
+    [Table("usuario")]
     public class Usuario
     {
         public int Id { get; set; }

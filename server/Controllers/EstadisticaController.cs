@@ -20,7 +20,7 @@ namespace ActivoFijoAPI.Controllers
             _context = context;
         }
 
-        // GET: api/Documentacion
+        // GET: api/Estadistica
         [HttpGet]
         public async Task<ActionResult<EstadisticaDto>> GetEstadistica()
         {

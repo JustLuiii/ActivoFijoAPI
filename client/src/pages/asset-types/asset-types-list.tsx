@@ -18,6 +18,7 @@ import { Badge } from "@/components/ui/badge"
 import { useDeleteAssetTypesMutation, useGetAllAssetTypesQuery } from "@/features/asset-types/assetTypesApiSlice"
 import { UILoading } from "@/components/ui-loading"
 import { UIError } from "@/components/ui-error"
+import { Pagination } from "@/components/pagination"
 
 export const AssetTypesList = () => {
 
@@ -70,47 +71,50 @@ export const AssetTypesList = () => {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {data.map((type) => (
-                                    <TableRow key={type.id}>
-                                        <TableCell>{type.id}</TableCell>
-                                        <TableCell>{type.descripcion}</TableCell>
-                                        <TableCell>{type.cuentaContableCompra}</TableCell>
-                                        <TableCell>{type.cuentaContableDepreciacion}</TableCell>
-                                        <TableCell className="text-center">
-                                            <Badge variant={type.activo ? "default" : "destructive"}>
-                                                {type.activo ? "Activo" : "Inactivo"}
-                                            </Badge>
-                                        </TableCell>
-                                        <TableCell className="text-right">
-                                            <Button variant="ghost" size="icon" asChild>
-                                                <Link to={`/asset-types/${type.id}/edit`}>
-                                                    <Edit className="h-4 w-4" />
-                                                </Link>
-                                            </Button>
-                                            <AlertDialog>
-                                                <AlertDialogTrigger asChild>
-                                                    <Button variant="ghost" size="icon" disabled={isDeleting}>
-                                                        {type.activo ? <ShieldMinus className="h-4 w-4" /> : <ShieldCheck className="h-4 w-4" />}
-                                                    </Button>
-                                                </AlertDialogTrigger>
-                                                <AlertDialogContent>
-                                                    <AlertDialogHeader>
-                                                        <AlertDialogTitle>¿Está seguro?</AlertDialogTitle>
-                                                        <AlertDialogDescription>
-                                                            Esto {type.activo ? 'desactivará' : 'activará'} el tipo de activo.
-                                                        </AlertDialogDescription>
-                                                    </AlertDialogHeader>
-                                                    <AlertDialogFooter>
-                                                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                                                        <AlertDialogAction onClick={() => handleDelete(type.id)} disabled={isDeleting}>
-                                                            {isDeleting ? 'En proceso...' : type.activo ? 'Desactivar' : 'Activar'}
-                                                        </AlertDialogAction>
-                                                    </AlertDialogFooter>
-                                                </AlertDialogContent>
-                                            </AlertDialog>
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
+                                <Pagination
+                                    data={data}
+                                    pageSize={5}
+                                    renderItem={(type) => (
+                                        <TableRow key={type.id}>
+                                            <TableCell>{type.id}</TableCell>
+                                            <TableCell>{type.descripcion}</TableCell>
+                                            <TableCell>{type.cuentaContableCompra}</TableCell>
+                                            <TableCell>{type.cuentaContableDepreciacion}</TableCell>
+                                            <TableCell className="text-center">
+                                                <Badge variant={type.activo ? "default" : "destructive"}>
+                                                    {type.activo ? "Activo" : "Inactivo"}
+                                                </Badge>
+                                            </TableCell>
+                                            <TableCell className="text-right">
+                                                <Button variant="ghost" size="icon" asChild>
+                                                    <Link to={`/asset-types/${type.id}/edit`}>
+                                                        <Edit className="h-4 w-4" />
+                                                    </Link>
+                                                </Button>
+                                                <AlertDialog>
+                                                    <AlertDialogTrigger asChild>
+                                                        <Button variant="ghost" size="icon" disabled={isDeleting}>
+                                                            {type.activo ? <ShieldMinus className="h-4 w-4" /> : <ShieldCheck className="h-4 w-4" />}
+                                                        </Button>
+                                                    </AlertDialogTrigger>
+                                                    <AlertDialogContent>
+                                                        <AlertDialogHeader>
+                                                            <AlertDialogTitle>¿Está seguro?</AlertDialogTitle>
+                                                            <AlertDialogDescription>
+                                                                Esto {type.activo ? 'desactivará' : 'activará'} el tipo de activo.
+                                                            </AlertDialogDescription>
+                                                        </AlertDialogHeader>
+                                                        <AlertDialogFooter>
+                                                            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                                            <AlertDialogAction onClick={() => handleDelete(type.id)} disabled={isDeleting}>
+                                                                {isDeleting ? 'En proceso...' : type.activo ? 'Desactivar' : 'Activar'}
+                                                            </AlertDialogAction>
+                                                        </AlertDialogFooter>
+                                                    </AlertDialogContent>
+                                                </AlertDialog>
+                                            </TableCell>
+                                        </TableRow>
+                                    )} />
                             </TableBody>
                         </Table>
                     )}

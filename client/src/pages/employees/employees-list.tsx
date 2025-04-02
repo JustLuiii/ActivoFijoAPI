@@ -18,6 +18,7 @@ import { Badge } from "@/components/ui/badge"
 import { useDeleteEmployeesMutation, useGetAllEmployeesQuery } from "@/features/employees/employeesApiSlice"
 import { UILoading } from "@/components/ui-loading"
 import { UIError } from "@/components/ui-error"
+import { Pagination } from "@/components/pagination"
 
 export const EmployeesList = () => {
     const { data = [], isLoading, isFetching, isError, refetch } = useGetAllEmployeesQuery(undefined, {
@@ -74,53 +75,56 @@ export const EmployeesList = () => {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {data.map((employee) => (
-                                    <TableRow key={employee.id}>
-                                        <TableCell>{employee.id}</TableCell>
-                                        <TableCell className="font-medium">{employee.nombre}</TableCell>
-                                        <TableCell className="hidden md:table-cell">{employee.cedula}</TableCell>
-                                        <TableCell className="hidden md:table-cell">{employee.departamento.descripcion}</TableCell>
-                                        <TableCell className="hidden md:table-cell">{employee.tipoPersona == 1 ? 'Física' : 'Jurídica'}</TableCell>
-                                        <TableCell className="text-center">
-                                            <Badge variant={employee.activo ? "default" : "destructive"}>
-                                                {employee.activo ? "Activo" : "Inactivo"}
-                                            </Badge>
-                                        </TableCell>
-                                        <TableCell className="text-right">
-                                            <div className="flex justify-end gap-2">
-                                                <Button variant="ghost" size="icon" asChild>
-                                                    <Link to={`/employees/${employee.id}/edit`}>
-                                                        <Edit className="h-4 w-4" />
-                                                        <span className="sr-only">Editar</span>
-                                                    </Link>
-                                                </Button>
-                                                <AlertDialog>
-                                                    <AlertDialogTrigger asChild>
-                                                        <Button variant="ghost" size="icon">
-                                                            {employee.activo ? <ShieldMinus className="h-4 w-4" /> : <ShieldCheck className="h-4 w-4" />}
-                                                            <span className="sr-only">{employee.activo ? 'Desactivar' : 'Activar'} </span>
-                                                        </Button>
-                                                    </AlertDialogTrigger>
-                                                    <AlertDialogContent>
-                                                        <AlertDialogHeader>
-                                                            <AlertDialogTitle>¿Está seguro?</AlertDialogTitle>
-                                                            <AlertDialogDescription>
-                                                                Esto {employee.activo ? 'inhabilitara' : 'habilitara'} permanentemente al empleado y todos los
-                                                                datos asociados.
-                                                            </AlertDialogDescription>
-                                                        </AlertDialogHeader>
-                                                        <AlertDialogFooter>
-                                                            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                                                            <AlertDialogAction onClick={() => handleDelete(employee.id)}>
-                                                                {isDeleting ? 'Enviado...' : employee.activo ? 'Desactivar' : 'Activar'}
-                                                            </AlertDialogAction>
-                                                        </AlertDialogFooter>
-                                                    </AlertDialogContent>
-                                                </AlertDialog>
-                                            </div>
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
+                                <Pagination
+                                    data={data}
+                                    pageSize={5}
+                                    renderItem={(employee) => (
+                                        <TableRow key={employee.id}>
+                                            <TableCell>{employee.id}</TableCell>
+                                            <TableCell className="font-medium">{employee.nombre}</TableCell>
+                                            <TableCell className="hidden md:table-cell">{employee.cedula}</TableCell>
+                                            <TableCell className="hidden md:table-cell">{employee.departamento.descripcion}</TableCell>
+                                            <TableCell className="hidden md:table-cell">{employee.tipoPersona == 1 ? 'Física' : 'Jurídica'}</TableCell>
+                                            <TableCell className="text-center">
+                                                <Badge variant={employee.activo ? "default" : "destructive"}>
+                                                    {employee.activo ? "Activo" : "Inactivo"}
+                                                </Badge>
+                                            </TableCell>
+                                            <TableCell className="text-right">
+                                                <div className="flex justify-end gap-2">
+                                                    <Button variant="ghost" size="icon" asChild>
+                                                        <Link to={`/employees/${employee.id}/edit`}>
+                                                            <Edit className="h-4 w-4" />
+                                                            <span className="sr-only">Editar</span>
+                                                        </Link>
+                                                    </Button>
+                                                    <AlertDialog>
+                                                        <AlertDialogTrigger asChild>
+                                                            <Button variant="ghost" size="icon">
+                                                                {employee.activo ? <ShieldMinus className="h-4 w-4" /> : <ShieldCheck className="h-4 w-4" />}
+                                                                <span className="sr-only">{employee.activo ? 'Desactivar' : 'Activar'} </span>
+                                                            </Button>
+                                                        </AlertDialogTrigger>
+                                                        <AlertDialogContent>
+                                                            <AlertDialogHeader>
+                                                                <AlertDialogTitle>¿Está seguro?</AlertDialogTitle>
+                                                                <AlertDialogDescription>
+                                                                    Esto {employee.activo ? 'inhabilitara' : 'habilitara'} permanentemente al empleado y todos los
+                                                                    datos asociados.
+                                                                </AlertDialogDescription>
+                                                            </AlertDialogHeader>
+                                                            <AlertDialogFooter>
+                                                                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                                                <AlertDialogAction onClick={() => handleDelete(employee.id)}>
+                                                                    {isDeleting ? 'Enviado...' : employee.activo ? 'Desactivar' : 'Activar'}
+                                                                </AlertDialogAction>
+                                                            </AlertDialogFooter>
+                                                        </AlertDialogContent>
+                                                    </AlertDialog>
+                                                </div>
+                                            </TableCell>
+                                        </TableRow>
+                                    )} />
                             </TableBody>
                         </Table>
                     )}

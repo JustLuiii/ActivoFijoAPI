@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using ActivoFijoAPI.Models;
 using ActivoFijoAPI.Data;
 using Microsoft.AspNetCore.Authorization;
+using ActivoFijoAPI.DTOs;
 
 namespace ActivoFijoAPI.Controllers
 {
@@ -20,12 +21,29 @@ namespace ActivoFijoAPI.Controllers
 
         // GET: api/ActivosFijos
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ActivoFijo>>> GetActivosFijos()
+        public async Task<ActionResult<IEnumerable<ActivoFijoDtos>>> GetActivosFijos()
         {
+
             return await _context.ActivosFijos
-                                 //.Include(a => a.TipoActivo)
-                                 //.Include(a => a.Departamento)
-                                 .ToListAsync();
+     .Include(a => a.TipoActivo)
+     .Include(a => a.Departamento)
+     .Select(a => new ActivoFijoDtos
+     {
+         Id = a.Id, 
+         Descripcion = a.Descripcion,
+         DepartamentoId = a.DepartamentoId,
+         departamento = a.Departamento != null ? a.Departamento.Descripcion : null, 
+         TipoActivoId = a.TipoActivoId,
+         tipoActivo = a.TipoActivo != null ? a.TipoActivo.Descripcion : null, 
+         FechaAdquisicion = a.FechaAdquisicion,
+         Valor = a.Valor,
+         DepreciacionAcumulada = a.DepreciacionAcumulada,
+         Estado = a.Estado,
+         EstadoNombre = a.Estado == 1 ? "Operativo" :
+                        a.Estado == 2 ? "Mantenimiento" :
+                        a.Estado == 3 ? "Baja" : "Desconocido"
+     })
+     .ToListAsync();
         }
 
         // GET: api/ActivosFijos/5

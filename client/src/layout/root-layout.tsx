@@ -2,7 +2,7 @@ import { SidebarProvider } from "@/components/ui/sidebar"
 import { MainSidebar } from "@/components/main-sidebar"
 import { Navbar } from "@/components/navbar"
 import { Outlet } from "react-router"
-import { ProtectedRoute } from "@/components/ProtectedRoute"
+import { ProtectedRoute } from "@/components/protected-route"
 
 
 export const RootLayout = () => {

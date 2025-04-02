@@ -18,5 +18,7 @@ namespace ActivoFijoAPI.Models
         public string CuentaContableDepreciacion { get; set; }
 
         public bool Activo { get; set; }
+
+        public virtual ICollection<ActivoFijo>? activosFijos { get; set; }
     }
 }

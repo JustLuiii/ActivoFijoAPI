@@ -13,10 +13,12 @@ namespace ActivoFijoAPI.Models
 
         [Column("departamento_id")]
         public int? DepartamentoId { get; set; }
+        public virtual Departamento Departamento { get; set; }
 
         [Column("tipo_activo_id")]
         public int TipoActivoId { get; set; }
-        
+        public virtual TipoActivo TipoActivo { get; set; }
+
         [Column("fecha_adquisicion")]
         public DateTime FechaAdquisicion { get; set; }
         public decimal Valor { get; set; }

@@ -1,6 +1,6 @@
 import { Outlet } from "react-router"
 import { Package } from "lucide-react"
-import { PublicRoute } from "@/components/PublicRoute"
+import { PublicRoute } from "@/components/public-route"
 
 
 export const AuthLayout = () => {

@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { useGetAllDepartmentsQuery, useDeleteDepartmentsMutation } from "@/features/departments/departmentsApiSlice";
 import { UILoading } from "@/components/ui-loading";
 import { UIError } from "@/components/ui-error";
+import { Pagination } from "@/components/pagination";
 
 export const DepartmentList = () => {
     const { data = [], isLoading, isFetching, isError, refetch } = useGetAllDepartmentsQuery(undefined, {
@@ -51,6 +52,7 @@ export const DepartmentList = () => {
                     ) : isError ? (
                         <UIError onRetry={refetch} />
                     ) : (
+
                         <Table className="table-auto w-auto max-w-full min-w-3xl">
                             <TableHeader>
                                 <TableRow>
@@ -61,51 +63,56 @@ export const DepartmentList = () => {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {data.map((department) => (
-                                    <TableRow key={department.id}>
-                                        <TableCell>{department.id}</TableCell>
-                                        <TableCell className="hidden md:table-cell">{department.descripcion}</TableCell>
-                                        <TableCell className="text-center">
-                                            <Badge variant={department.activo ? "default" : "destructive"}>
-                                                {department.activo ? "Activo" : "Inactivo"}
-                                            </Badge>
-                                        </TableCell>
-                                        <TableCell className="text-right">
-                                            <div className="flex justify-end gap-2">
-                                                <Button variant="ghost" size="icon" asChild>
-                                                    <Link to={`/departments/${department.id}/edit`}>
-                                                        <Edit className="h-4 w-4" />
-                                                        <span className="sr-only">Editar</span>
-                                                    </Link>
-                                                </Button>
-                                                <AlertDialog>
-                                                    <AlertDialogTrigger asChild>
-                                                        <Button variant="ghost" size="icon" disabled={isDeleting}>
-                                                            {department.activo ? <ShieldMinus className="h-4 w-4" /> : <ShieldCheck className="h-4 w-4" />}
-                                                            <span className="sr-only">{department.activo ? 'Desactivar' : 'Activar'} </span>
-                                                        </Button>
-                                                    </AlertDialogTrigger>
-                                                    <AlertDialogContent>
-                                                        <AlertDialogHeader>
-                                                            <AlertDialogTitle>¿Está seguro?</AlertDialogTitle>
-                                                            <AlertDialogDescription>
-                                                                Esto {department.activo ? 'inhabilitara' : 'habilitara'} permanentemente el departamento y todos los datos asociados.
-                                                            </AlertDialogDescription>
-                                                        </AlertDialogHeader>
-                                                        <AlertDialogFooter>
-                                                            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                                                            <AlertDialogAction onClick={() => handleDelete(department.id)} disabled={isDeleting}>
-                                                                {isDeleting ? 'Enviado...' : department.activo ? 'Desactivar' : 'Activar'}
-                                                            </AlertDialogAction>
-                                                        </AlertDialogFooter>
-                                                    </AlertDialogContent>
-                                                </AlertDialog>
-                                            </div>
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
+                                <Pagination
+                                    data={data}
+                                    pageSize={5}
+                                    renderItem={(department) => (
+                                        <TableRow key={department.id} className="w-full">
+                                            <TableCell>{department.id}</TableCell>
+                                            <TableCell className="hidden md:table-cell">{department.descripcion}</TableCell>
+                                            <TableCell className="text-center">
+                                                <Badge variant={department.activo ? "default" : "destructive"}>
+                                                    {department.activo ? "Activo" : "Inactivo"}
+                                                </Badge>
+                                            </TableCell>
+                                            <TableCell className="text-right">
+                                                <div className="flex justify-end gap-2">
+                                                    <Button variant="ghost" size="icon" asChild>
+                                                        <Link to={`/departments/${department.id}/edit`}>
+                                                            <Edit className="h-4 w-4" />
+                                                            <span className="sr-only">Editar</span>
+                                                        </Link>
+                                                    </Button>
+                                                    <AlertDialog>
+                                                        <AlertDialogTrigger asChild>
+                                                            <Button variant="ghost" size="icon" disabled={isDeleting}>
+                                                                {department.activo ? <ShieldMinus className="h-4 w-4" /> : <ShieldCheck className="h-4 w-4" />}
+                                                                <span className="sr-only">{department.activo ? 'Desactivar' : 'Activar'} </span>
+                                                            </Button>
+                                                        </AlertDialogTrigger>
+                                                        <AlertDialogContent>
+                                                            <AlertDialogHeader>
+                                                                <AlertDialogTitle>¿Está seguro?</AlertDialogTitle>
+                                                                <AlertDialogDescription>
+                                                                    Esto {department.activo ? 'inhabilitara' : 'habilitara'} permanentemente el departamento y todos los datos asociados.
+                                                                </AlertDialogDescription>
+                                                            </AlertDialogHeader>
+                                                            <AlertDialogFooter>
+                                                                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                                                <AlertDialogAction onClick={() => handleDelete(department.id)} disabled={isDeleting}>
+                                                                    {isDeleting ? 'Enviado...' : department.activo ? 'Desactivar' : 'Activar'}
+                                                                </AlertDialogAction>
+                                                            </AlertDialogFooter>
+                                                        </AlertDialogContent>
+                                                    </AlertDialog>
+                                                </div>
+                                            </TableCell>
+                                        </TableRow>
+                                    )}
+                                />
                             </TableBody>
                         </Table>
+
                     )}
                 </CardContent>
             </Card>

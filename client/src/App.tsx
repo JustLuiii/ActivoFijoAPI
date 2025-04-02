@@ -23,6 +23,7 @@ import { EditAsset } from "./pages/assets/edit-asset"
 import { AuthLayout } from "./layout/auth-layout"
 import LoginPage from "./pages/auth/login-page"
 import SignupPage from "./pages/auth/signup-page"
+import { DepreciationCalculate } from "./pages/depreciation/depreciation-calculate"
 
 function App() {
   return (
@@ -58,6 +59,7 @@ function App() {
               <Route path="new" element={<NewAsset />} />
               <Route path=":id/edit" element={<EditAsset />} />
             </Route>
+            <Route path="calculate-depreciation" element={<DepreciationCalculate />} />
           </Route>
         </Route>
       </Routes>

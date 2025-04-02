@@ -1,4 +1,4 @@
-import { Boxes, Building2, LayoutDashboard, Package, Users } from "lucide-react";
+import { Boxes, Building2, Calculator, LayoutDashboard, Package, Users } from "lucide-react";
 
 
 export const OPTION_SIDE_BAR = (pathname: string) => ([
@@ -42,5 +42,16 @@ export const OPTION_SIDE_BAR = (pathname: string) => ([
             },
         ],
     },
+    {
+        title: 'Herramientas',
+        items: [
+            {
+                title: "Calcular Depreciación",
+                icon: Calculator,
+                href: "/calculate-depreciation",
+                isActive: pathname?.startsWith("/depreciation"),
+            }
+        ]
+    }
 
 ]);

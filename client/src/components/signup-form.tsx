@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { PasswordStrengthIndicator } from "@/components/password-strength-indicator";
 import { useNavigate } from "react-router";
-import { useCreateUsersMutation } from "@/features/authentication/authenticationApiSlice";
+import { useCreateUsersMutation } from "@/features/users/usersApiSlice";
 
 export function SignupForm() {
     const navigate = useNavigate();

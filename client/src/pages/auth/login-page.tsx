@@ -1,5 +1,5 @@
 import { LoginForm } from "@/components/login-form";
-import { Link } from "react-router";
+// import { Link } from "react-router";
 
 export default function LoginPage() {
     return (
@@ -9,12 +9,12 @@ export default function LoginPage() {
                 <p className="text-sm text-muted-foreground">Ingrese sus credenciales para acceder al sistema</p>
             </div>
             <LoginForm />
-            <div className="text-center text-sm">
+            {/* <div className="text-center text-sm">
                 ¿No tiene una cuenta?{" "}
                 <Link to="/signup" className="font-medium text-primary hover:underline">
                     Registrarse
                 </Link>
-            </div>
+            </div> */}
         </div>
     )
 }

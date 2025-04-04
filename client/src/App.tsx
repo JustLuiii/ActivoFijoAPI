@@ -24,6 +24,9 @@ import { AuthLayout } from "./layout/auth-layout"
 import LoginPage from "./pages/auth/login-page"
 import SignupPage from "./pages/auth/signup-page"
 import { DepreciationCalculate } from "./pages/depreciation/depreciation-calculate"
+import { UsersPage } from "./pages/users/users.page"
+import { UsersList } from "./pages/users/users-list"
+import { NewUsers } from "./pages/users/new-users"
 
 function App() {
   return (
@@ -35,7 +38,7 @@ function App() {
         <Route path="/">
           <Route element={<AuthLayout />}>
             <Route path="login" element={<LoginPage />} />
-            <Route path="signup" element={<SignupPage />} />
+            {/* <Route path="signup" element={<SignupPage />} /> */}
           </Route>
           <Route element={<RootLayout />}>
             <Route index element={<DashBoardPage />} />
@@ -57,6 +60,11 @@ function App() {
             <Route path="assets" element={<AssetsPage />}>
               <Route index element={<AssetsList />} />
               <Route path="new" element={<NewAsset />} />
+              <Route path=":id/edit" element={<EditAsset />} />
+            </Route>
+            <Route path="users" element={<UsersPage />}>
+              <Route index element={<UsersList />} />
+              <Route path="new" element={<NewUsers />} />
               <Route path=":id/edit" element={<EditAsset />} />
             </Route>
             <Route path="calculate-depreciation" element={<DepreciationCalculate />} />

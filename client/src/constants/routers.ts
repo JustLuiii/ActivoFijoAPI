@@ -40,6 +40,12 @@ export const OPTION_SIDE_BAR = (pathname: string) => ([
                 href: "/assets",
                 isActive: pathname?.startsWith("/assets"),
             },
+            {
+                title: "Usuarios",
+                icon: Package,
+                href: "/users",
+                isActive: pathname?.startsWith("/users"),
+            },
         ],
     },
     {

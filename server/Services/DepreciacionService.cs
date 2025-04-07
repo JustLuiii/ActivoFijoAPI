@@ -4,19 +4,45 @@ namespace ActivoFijoAPI.Services
 {
     public interface IDepreciacionService
     {
-        ResultadoDepreciacion CalcularDepreciacion(ActivoFijo activo, int anio, int mes, DateTime fechaProceso);
+        List<Depreciacion> CalcularDepreciacion(ActivoFijo activo, int vidaUtilAnios, decimal valorResidual, DateTime fechaCorte);
     }
 
     public class DepreciacionService : IDepreciacionService
     {
-        public ResultadoDepreciacion CalcularDepreciacion(ActivoFijo activo, int anio, int mes, DateTime fechaProceso)
-        {
+        public List<Depreciacion> CalcularDepreciacion(ActivoFijo activo, int vidaUtilAnios, decimal valorResidual, DateTime fechaCorte)
+        { 
+            var depreciaciones = new List<Depreciacion>();
 
-            return new ResultadoDepreciacion
+            decimal valorDepreciable = activo.Valor - valorResidual;
+            decimal depreciacionMensual = valorDepreciable / (vidaUtilAnios * 12);
+            decimal acumulado = activo.DepreciacionAcumulada;
+
+            DateTime fechaInicio = activo.FechaAdquisicion;
+            DateTime fechaProceso = new DateTime(fechaInicio.Year, fechaInicio.Month, 1);
+
+            while (fechaProceso <= fechaCorte)
             {
-                MontoDepreciado = 0,
-                DepreciacionAcumulada = 0
-            };
+                // Si ya se depreció todo, se detiene
+                if (acumulado >= valorDepreciable)
+                    break;
+
+                // Evitar pasar el valor depreciable
+                decimal monto = Math.Min(depreciacionMensual, valorDepreciable - acumulado);
+                acumulado += monto;
+
+                depreciaciones.Add(new Depreciacion
+                {
+                    AnioProceso = fechaProceso.Year,
+                    MesProceso = fechaProceso.Month,
+                    MontoDepreciado = monto,
+                    DepreciacionAcumulada = acumulado,
+                    ActivoFijo = activo
+                });
+
+                fechaProceso = fechaProceso.AddMonths(1);
+            }
+
+            return depreciaciones;
         }
     }
 

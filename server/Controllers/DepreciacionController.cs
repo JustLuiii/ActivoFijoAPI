@@ -40,16 +40,39 @@ namespace ActivoFijoAPI.Controllers
             return result;
         }
 
-        // GET: api/calcular/idActivoFijo/AnioProceso/MesProceso/FechaProceso
-        [HttpGet("calcular/{idActivoFijo}/{AnioProceso}/{MesProceso}/{FechaProceso}")]
-        public async Task<ActionResult<ResultadoDepreciacion>> GetDepreciacion(int idActivoFijo, int AnioProceso, int MesProceso, DateTime FechaProceso)
+        // GET: api/calcular/idActivoFijo/vidaUtilAnios/valorResidual/fechaCorte
+        /*
+            Vida Util Años - años
+            -------------------------------------
+            Políticas contables de la empresa
+
+            Equipos de cómputo → 3 a 5 años
+
+            Vehículos → 5 años
+
+            Mobiliario → 10 años
+
+            Maquinaria pesada → 10-15 años
+            -------------------------------------
+
+            Valor Residual - monto
+            -------------------------------------
+            1. Una estimación interna
+                Basada en la experiencia del área contable o técnica.
+                Por ejemplo: Se espera vender una camioneta vieja por $1,000 cuando ya no sirva para la empresa.
+            
+            2. Tasas predefinidas
+                Algunas empresas usan un porcentaje fijo del valor original, como 5% o 10%.
+
+            3.Valor cero
+                Si no se espera recuperar nada, simplemente se usa 0 como valor residual.
+         */
+        [HttpGet("calcular/{idActivoFijo}/{vidaUtilAnios}/{valorResidual}/{fechaCorte}")]
+        public async Task<ActionResult<List<Depreciacion>>> GetDepreciacion(int idActivoFijo, int vidaUtilAnios, decimal valorResidual, DateTime fechaCorte)
         {
             var activoFijo = _context.ActivosFijos.Where(x => x.Id == idActivoFijo).FirstOrDefault();
-            
             if (activoFijo == null) return NotFound();
-            
-            var depreciaciones = _depreciacionService.CalcularDepreciacion(activoFijo, AnioProceso, MesProceso, FechaProceso);
-
+            var depreciaciones = _depreciacionService.CalcularDepreciacion(activoFijo, vidaUtilAnios, valorResidual, fechaCorte);
             return depreciaciones;
         }
 

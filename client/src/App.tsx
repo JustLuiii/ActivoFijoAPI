@@ -22,11 +22,11 @@ import { NewAsset } from "./pages/assets/new-asset"
 import { EditAsset } from "./pages/assets/edit-asset"
 import { AuthLayout } from "./layout/auth-layout"
 import LoginPage from "./pages/auth/login-page"
-import SignupPage from "./pages/auth/signup-page"
 import { DepreciationCalculate } from "./pages/depreciation/depreciation-calculate"
 import { UsersPage } from "./pages/users/users.page"
 import { UsersList } from "./pages/users/users-list"
-import { NewUsers } from "./pages/users/new-users"
+import { NewUser } from "./pages/users/new-user"
+import { EditUser } from "./pages/users/edit-user"
 
 function App() {
   return (
@@ -64,8 +64,8 @@ function App() {
             </Route>
             <Route path="users" element={<UsersPage />}>
               <Route index element={<UsersList />} />
-              <Route path="new" element={<NewUsers />} />
-              <Route path=":id/edit" element={<EditAsset />} />
+              <Route path="new" element={<NewUser />} />
+              <Route path=":id/edit" element={<EditUser />} />
             </Route>
             <Route path="calculate-depreciation" element={<DepreciationCalculate />} />
           </Route>

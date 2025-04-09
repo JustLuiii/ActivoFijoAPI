@@ -12,11 +12,11 @@ export const endpoints = {
         delete: (id?: number) => `departamentos/${id}`
     },
     users: {
-        getAll: 'users',
-        getById: (id: number) => `users/${id}`,
-        post: 'users',
-        update: (id?: number) => `users/${id}`,
-        delete: (id?: number) => `users/${id}`
+        getAll: 'usuarios',
+        getById: (id: number) => `usuarios/${id}`,
+        post: 'usuarios',
+        update: (id?: number) => `usuarios/${id}`,
+        delete: (id?: number) => `usuarios/${id}`
     },
     employees: {
         getAll: 'empleados',

@@ -29,7 +29,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         }
       },
     }),
-    deleteEmployees: builder.mutation<void, number>({
+    deleteUsers: builder.mutation<void, number>({
       query: (id) => ({
         url: endpoints.users.delete(id),
         method: 'DELETE'
@@ -39,5 +39,10 @@ export const usersApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
-  useCreateUsersMutation
+  useGetAllUsersQuery,
+  useGetByIdUsersQuery,
+  useLazyGetByIdUsersQuery,
+  useUpdateUsersMutation,
+  useCreateUsersMutation,
+  useDeleteUsersMutation
 } = usersApiSlice;

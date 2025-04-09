@@ -29,6 +29,8 @@ export function LoginForm() {
 
     //josePerez@@11
     //josePerez@gmail.com
+    //molina@hotmail.com
+    //123456
     async function onSubmit(data: { identifier: string; password: string; }) {
         // setIsLoading(true);
 

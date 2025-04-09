@@ -1,37 +1,29 @@
+import { Pagination } from "@/components/pagination"
+import { UIError } from "@/components/ui-error"
+import { UILoading } from "@/components/ui-loading"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Edit, PlusCircle, ShieldCheck, ShieldMinus } from "lucide-react"
-// import {
-//     AlertDialog,
-//     AlertDialogAction,
-//     AlertDialogCancel,
-//     AlertDialogContent,
-//     AlertDialogDescription,
-//     AlertDialogFooter,
-//     AlertDialogHeader,
-//     AlertDialogTitle,
-//     AlertDialogTrigger,
-// } from "@/components/ui/alert-dialog"
+import { useDeleteUsersMutation, useGetAllUsersQuery } from "@/features/users/usersApiSlice"
+import { Edit, PlusCircle, Trash } from "lucide-react"
 import { Link } from "react-router"
-// import { Badge } from "@/components/ui/badge"
-// import { useDeleteEmployeesMutation, useGetAllEmployeesQuery } from "@/features/employees/employeesApiSlice"
-// import { UILoading } from "@/components/ui-loading"
-// import { UIError } from "@/components/ui-error"
-// import { Pagination } from "@/components/pagination"
 
 export const UsersList = () => {
 
-    // const [deleteEmployee, { isLoading: isDeleting }] = useDeleteEmployeesMutation();
+    const [deleteEmployee, { isLoading: isDeleting }] = useDeleteUsersMutation();
 
-    // const handleDelete = async (id: number) => {
-    //     try {
-    //         await deleteEmployee(id).unwrap();
-    //         refetch();
-    //     } catch (error) {
-    //         console.error("Error eliminando departamento", error);
-    //     }
-    // };
+    const handleDelete = async (id: number) => {
+        try {
+            await deleteEmployee(id).unwrap();
+            refetch();
+        } catch (error) {
+            console.error("Error eliminando usuario", error);
+        }
+    };
+
+    const { data, isLoading, isFetching, isError, refetch } = useGetAllUsersQuery(undefined, {
+        refetchOnMountOrArgChange: true
+    });
 
 
     return (
@@ -53,8 +45,8 @@ export const UsersList = () => {
                     <CardTitle>Usuarios</CardTitle>
                     <CardDescription>Lista de usuarios registrados en el sistema</CardDescription>
                 </CardHeader>
-                {/* <CardContent>
-                    {isLoading || isFetching ? (
+                <CardContent>
+                    {isLoading || isFetching || isDeleting ? (
                         <UILoading variant="skeleton" count={5} />
                     ) : isError ? (
                         <UIError onRetry={refetch} />
@@ -62,62 +54,35 @@ export const UsersList = () => {
                         <Table className="table-auto w-auto max-w-full min-w-3xl">
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead>ID</TableHead>
+                                    <TableHead className="hidden md:table-cell">ID</TableHead>
                                     <TableHead>Nombre</TableHead>
-                                    <TableHead className="hidden md:table-cell">Cédula</TableHead>
-                                    <TableHead className="hidden md:table-cell">Departamento</TableHead>
-                                    <TableHead className="hidden md:table-cell">Tipo Persona</TableHead>
-                                    <TableHead className="text-center">Estado</TableHead>
+                                    <TableHead className="hidden md:table-cell">Email</TableHead>
+                                    <TableHead className="hidden md:table-cell">Sistema</TableHead>
                                     <TableHead className="text-right">Acciones</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
                                 <Pagination
-                                    data={data}
+                                    data={data || []}
                                     pageSize={5}
-                                    renderItem={(employee) => (
-                                        <TableRow key={employee.id}>
-                                            <TableCell>{employee.id}</TableCell>
-                                            <TableCell className="font-medium">{employee.nombre}</TableCell>
-                                            <TableCell className="hidden md:table-cell">{employee.cedula}</TableCell>
-                                            <TableCell className="hidden md:table-cell">{employee.departamento.descripcion}</TableCell>
-                                            <TableCell className="hidden md:table-cell">{employee.tipoPersona == 1 ? 'Física' : 'Jurídica'}</TableCell>
-                                            <TableCell className="text-center">
-                                                <Badge variant={employee.activo ? "default" : "destructive"}>
-                                                    {employee.activo ? "Activo" : "Inactivo"}
-                                                </Badge>
-                                            </TableCell>
+                                    renderItem={(user) => (
+                                        <TableRow key={user.id}>
+                                            <TableCell className="hidden md:table-cell">{user.id}</TableCell>
+                                            <TableCell className="font-medium">{user.nombre}</TableCell>
+                                            <TableCell className="hidden md:table-cell">{user.email}</TableCell>
+                                            <TableCell className="hidden md:table-cell">activo fijo</TableCell>
                                             <TableCell className="text-right">
                                                 <div className="flex justify-end gap-2">
                                                     <Button variant="ghost" size="icon" asChild>
-                                                        <Link to={`/employees/${employee.id}/edit`}>
+                                                        <Link to={`/users/${user.id}/edit`}>
                                                             <Edit className="h-4 w-4" />
                                                             <span className="sr-only">Editar</span>
                                                         </Link>
                                                     </Button>
-                                                    <AlertDialog>
-                                                        <AlertDialogTrigger asChild>
-                                                            <Button variant="ghost" size="icon">
-                                                                {employee.activo ? <ShieldMinus className="h-4 w-4" /> : <ShieldCheck className="h-4 w-4" />}
-                                                                <span className="sr-only">{employee.activo ? 'Desactivar' : 'Activar'} </span>
-                                                            </Button>
-                                                        </AlertDialogTrigger>
-                                                        <AlertDialogContent>
-                                                            <AlertDialogHeader>
-                                                                <AlertDialogTitle>¿Está seguro?</AlertDialogTitle>
-                                                                <AlertDialogDescription>
-                                                                    Esto {employee.activo ? 'inhabilitara' : 'habilitara'} permanentemente al empleado y todos los
-                                                                    datos asociados.
-                                                                </AlertDialogDescription>
-                                                            </AlertDialogHeader>
-                                                            <AlertDialogFooter>
-                                                                <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                                                                <AlertDialogAction onClick={() => handleDelete(employee.id)}>
-                                                                    {isDeleting ? 'Enviado...' : employee.activo ? 'Desactivar' : 'Activar'}
-                                                                </AlertDialogAction>
-                                                            </AlertDialogFooter>
-                                                        </AlertDialogContent>
-                                                    </AlertDialog>
+                                                    <Button variant="ghost" size="icon" onClick={() => handleDelete(user.id)} disabled={isDeleting}>
+                                                        <Trash className="h-4 w-4" />
+                                                        <span className="sr-only">{isDeleting ? 'Eliminando...' : 'Eliminar'}</span>
+                                                    </Button>
                                                 </div>
                                             </TableCell>
                                         </TableRow>
@@ -125,7 +90,7 @@ export const UsersList = () => {
                             </TableBody>
                         </Table>
                     )}
-                </CardContent> */}
+                </CardContent>
             </Card>
         </>
     )

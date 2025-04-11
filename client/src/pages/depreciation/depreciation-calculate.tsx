@@ -1,7 +1,5 @@
-import { Button } from "@/components/ui/button"
+import { DepreciationForm } from "@/components/depreciation-form"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Edit, PlusCircle, ShieldCheck, ShieldMinus } from "lucide-react"
 
 export const DepreciationCalculate = () => {
 
@@ -16,7 +14,7 @@ export const DepreciationCalculate = () => {
                 </CardHeader>
 
                 <CardContent>
-
+                    <DepreciationForm />
                 </CardContent>
             </Card>
         </>

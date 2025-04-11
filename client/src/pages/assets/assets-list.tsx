@@ -69,7 +69,7 @@ export const AssetsList = () => {
                     </Link>
                 </Button>
             </div>
-            <Card>
+            <Card className="max-w-4xl mt-4">
                 <CardHeader>
                     <CardTitle>Activos Fijos</CardTitle>
                     <CardDescription>Lista de activos fijos registrados</CardDescription>

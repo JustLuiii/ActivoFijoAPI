@@ -56,6 +56,15 @@ builder.Services.AddSwaggerGen(c =>
         Description = "Una API de ejemplo para mostrar cómo usar Swagger"
     });
 });
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("PermitirTodo", builder =>
+    {
+        builder.AllowAnyHeader();
+    });
+});
+
 var app = builder.Build();
 
 // Configurar el pipeline de la aplicación
@@ -68,8 +77,6 @@ if (app.Environment.IsDevelopment())
         c.RoutePrefix = string.Empty; // Esto hace que la UI de Swagger esté disponible en la raíz (http://localhost:5000)
     });
 }
-
-
 
 app.UseAuthorization();
 

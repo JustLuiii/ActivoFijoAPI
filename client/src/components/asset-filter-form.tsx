@@ -93,8 +93,8 @@ export const AssetFilterComponent = ({ onFilter, onReset }: IAssetFilterComponen
 
     return (
         <>
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 max-h-full">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4">
                     <div className="mt-4">
                         <Label htmlFor="descripcion">Descripción</Label>
                         <Input

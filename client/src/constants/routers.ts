@@ -55,7 +55,7 @@ export const OPTION_SIDE_BAR = (pathname: string) => ([
                 title: "Calcular Depreciación",
                 icon: Calculator,
                 href: "/calculate-depreciation",
-                isActive: pathname?.startsWith("/depreciation"),
+                isActive: pathname?.startsWith("/calculate-depreciation"),
             }
         ]
     }

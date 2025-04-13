@@ -1,3 +1,5 @@
+import { DepreciationFormData } from "@/features/depreciation/depreciationTypes";
+
 export const endpoints = {
     authentication: {
         getAll: 'authentication',
@@ -41,6 +43,11 @@ export const endpoints = {
         post: 'activosfijos',
         update: (id?: number) => `activosfijos/${id}`,
         delete: (id?: number) => `activosfijos/${id}`
+    },
+    depreciation: {
+        getCalcular: ({ idActivoFijo, vidaUtilAnios, valorResidual, fechaCorte }: DepreciationFormData) =>
+            `depreciacion/calcular/${idActivoFijo}/${vidaUtilAnios}/${valorResidual}/${fechaCorte}`,
+        post: 'depreciacion',
     }
 
 }

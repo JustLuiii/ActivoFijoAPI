@@ -67,7 +67,7 @@ export const UserForm = ({ id }: UserFormProps) => {
             if (id) {
                 await updateUser({ id: userId, ...data }).unwrap();
             } else {
-                await createUser({ email: data.email, idSistemaAuxiliar: 9, nombre: data.nombre, password: '123456' }).unwrap();
+                await createUser({ email: data.email, nombre: data.nombre, password: '123456' }).unwrap();
             }
             navigate("/users");
         } catch (err) {

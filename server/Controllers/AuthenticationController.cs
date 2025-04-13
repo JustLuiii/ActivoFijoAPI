@@ -8,12 +8,10 @@ using System.Security.Claims;
 using System.Text;
 using ActivoFijoAPI.Data;
 using ActivoFijoAPI.DTOs;
-using System.Text.Json;
-using System.Net.Http;
+using ActivoFijoAPI.Services;
 
 namespace ActivoFijoAPI.Controllers
 {
-
     [Route("api/[controller]")]
     [ApiController]
     public class AuthenticationController : ControllerBase
@@ -30,6 +28,7 @@ namespace ActivoFijoAPI.Controllers
         [HttpPost("registrar")]
         public async Task<ActionResult<UsuarioRespuestaDto>> Registrar(UsuarioRegistroDto registroDto)
         {
+            var service = new AutenticationServices();
             if (await _context.Usuarios.AnyAsync(u => u.Email == registroDto.Email))
                 return BadRequest("El email ya está registrado");
 
@@ -45,25 +44,28 @@ namespace ActivoFijoAPI.Controllers
             };
 
             _context.Usuarios.Add(usuario);
+
             await _context.SaveChangesAsync();
 
             var token = GenerateJwtToken(usuario);
 
             //Registrar en el sistema de contabilidad
-            await RegistrarContabilidadExterno(usuario, registroDto.Password);
+            var registroContabilidad = await service.RegistrarContabilidadExternoAsync(usuario, registroDto.Password);
 
             return new UsuarioRespuestaDto
             {
                 Id = usuario.Id,
                 Nombre = usuario.Nombre,
                 Email = usuario.Email,
-                Token = token
+                Token = token,
+                TokenServicioExterno = registroContabilidad!.token
             };
         }
 
         [HttpPost("login")]
         public async Task<ActionResult<UsuarioRespuestaDto>> Login(UsuarioLoginDto loginDto)
         {
+            var service = new AutenticationServices();
             var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == loginDto.Email);
 
             if (usuario == null)
@@ -74,9 +76,13 @@ namespace ActivoFijoAPI.Controllers
 
             var token = GenerateJwtToken(usuario);
 
-            var authContabilidad = await AutenticarContabilidadExterno(loginDto);
+            var authContabilidad = await service.LoginAsync(new LoginRequest
+            {
+                email = loginDto.Email,
+                password = loginDto.Password
+            });
 
-            return new UsuarioRespuestaDto { Id = usuario.Id, Nombre = usuario.Nombre, Email = usuario.Email, Token = token, DatosExternos = authContabilidad.Value };
+            return new UsuarioRespuestaDto { Id = usuario.Id, Nombre = usuario.Nombre, Email = usuario.Email, Token = token, TokenServicioExterno = authContabilidad!.token };
         }
 
         private string GenerateJwtToken(Usuario usuario)
@@ -102,76 +108,6 @@ namespace ActivoFijoAPI.Controllers
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
             return tokenHandler.WriteToken(token);
-        }
-
-        private async Task<ActionResult> RegistrarContabilidadExterno(Usuario usuario, string Password)
-        {
-            try
-            {
-                var httpClient = new HttpClient();
-                var urlExterno = "https://iso810-contabilidad.azurewebsites.net/api/Autenticacion/register";
-
-                var datosExternos = new
-                {
-                    nombre = usuario.Nombre,
-                    email = usuario.Email,
-                    sistemaAuxiliarId = usuario.IdSistemaAuxiliar,
-                    password = Password
-                };
-
-                var contenido = new StringContent(
-                    JsonSerializer.Serialize(datosExternos),
-                    Encoding.UTF8,
-                    "application/json");
-
-                var respuesta = await httpClient.PostAsync(urlExterno, contenido);
-
-                if (!respuesta.IsSuccessStatusCode)
-                {
-                    // Opcional: Revertir el registro local si falla el externo
-                    _context.Usuarios.Remove(usuario);
-                    await _context.SaveChangesAsync();
-                    return StatusCode((int)respuesta.StatusCode, "Error al registrar en el sistema externo");
-                }
-
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                // Manejar errores de conexión
-                return StatusCode(500, $"Error al conectar con el servicio externo: {ex.Message}");
-            }
-        }
-
-        private async Task<ActionResult<string>> AutenticarContabilidadExterno(UsuarioLoginDto loginDto)
-        {
-            try
-            {
-                var httpClient = new HttpClient();
-                var urlExterno = "https://iso810-contabilidad.azurewebsites.net/api/Autenticacion/login";
-
-                var datosLoginExterno = new
-                {
-                    email = loginDto.Email,
-                    password = loginDto.Password
-                };
-
-                var respuesta = await httpClient.PostAsJsonAsync(urlExterno, datosLoginExterno);
-
-                if (!respuesta.IsSuccessStatusCode)
-                {
-                    return StatusCode((int)respuesta.StatusCode, $"Error en autenticación externa: {await respuesta.Content.ReadAsStringAsync()}");
-                }
-
-                // 3. Opcional: Procesar respuesta del endpoint externo
-                var respuestaExterna = await respuesta.Content.ReadFromJsonAsync<dynamic>();
-
-                return respuestaExterna;
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Error al conectar con el servicio externo: {ex.Message}");
-            }
         }
     }
 }

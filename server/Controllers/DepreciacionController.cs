@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ActivoFijoAPI.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class DepreciacionController : ControllerBase

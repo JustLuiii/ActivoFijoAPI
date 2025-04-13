@@ -21,6 +21,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(option => option.UseSqlServe
 // Configurar Swagger para documentación de API
 builder.Services.AddEndpointsApiExplorer();
 
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddScoped<IDepreciacionService, DepreciacionService>();
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");

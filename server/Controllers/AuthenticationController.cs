@@ -18,7 +18,7 @@ namespace ActivoFijoAPI.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _configuration;
-
+        private const int idSistemaAuxiliar = 8; //Activos Fijos
         public AuthenticationController(ApplicationDbContext context, IConfiguration configuration)
         {
             _context = context;
@@ -38,7 +38,7 @@ namespace ActivoFijoAPI.Controllers
             {
                 Nombre = registroDto.Nombre,
                 Email = registroDto.Email,
-                IdSistemaAuxiliar = registroDto.IdSistemaAuxiliar,
+                IdSistemaAuxiliar = idSistemaAuxiliar,
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt
             };

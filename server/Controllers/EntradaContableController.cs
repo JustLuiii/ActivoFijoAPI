@@ -1,9 +1,13 @@
 ﻿using ActivoFijoAPI.Models;
 using ActivoFijoAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ActivoFijoAPI.Controllers
 {
+    [Authorize]
+    [Route("api/[controller]")]
+    [ApiController]
     public class EntradaContableController : ControllerBase
     {
         private readonly IHttpContextAccessor _httpContextAccessor;

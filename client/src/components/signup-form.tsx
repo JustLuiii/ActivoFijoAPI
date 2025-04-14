@@ -39,20 +39,17 @@ export function SignupForm() {
     }
 
     async function onSubmit(data: FormData) {
+
         if (data.password !== data.confirmPassword) {
             form.setError("confirmPassword", { type: "manual", message: "Las contraseñas no coinciden" });
             return;
         }
 
-
         try {
 
-            const response = await createUser({ email: data.email, idSistemaAuxiliar: 9, nombre: data.username, password: password }).unwrap();
+            const response = await createUser({ email: data.email, idSistemaAuxiliar: 8, nombre: data.username, password: password }).unwrap();
 
             console.log("response", response)
-            // localStorage.setItem("token", response.token);
-            // localStorage.setItem("email", response.email);
-            // localStorage.setItem("nombre", response.nombre);
 
             toast({ title: "Registro exitoso", description: "Su cuenta ha sido creada correctamente", variant: "default" });
             navigate("/login");

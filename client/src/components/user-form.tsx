@@ -33,6 +33,7 @@ export const UserForm = ({ id }: UserFormProps) => {
         register,
         handleSubmit,
         setValue,
+        setError,
         reset,
         formState: { errors },
     } = useForm<User>({
@@ -46,7 +47,6 @@ export const UserForm = ({ id }: UserFormProps) => {
     const [fetchUser, { isFetching }] = useLazyGetByIdUsersQuery();
     const [createUser, { isError: isCreateError }] = useCreateUsersMutation();
     const [updateUser, { isError: isUpdateError }] = useUpdateUsersMutation();
-
 
     useEffect(() => {
         if (id) {
@@ -67,10 +67,14 @@ export const UserForm = ({ id }: UserFormProps) => {
             if (id) {
                 await updateUser({ id: userId, ...data }).unwrap();
             } else {
-                await createUser({ email: data.email, nombre: data.nombre, password: '123456' }).unwrap();
+                await createUser({ email: data.email, idSistemaAuxiliar: 8, nombre: data.nombre, password: '123456' }).unwrap();
             }
             navigate("/users");
-        } catch (err) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (err: any) {
+            if (err.status === 400) {
+                setError("email", { type: "manual", message: "El correo electrónico ya está en uso" });
+            }
             console.error("Error al guardar el usuario", err);
         }
     };

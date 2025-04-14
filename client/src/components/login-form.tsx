@@ -29,8 +29,6 @@ export function LoginForm() {
 
     //josePerez@@11
     //josePerez@gmail.com
-    //molina@hotmail.com
-    //123456
     async function onSubmit(data: { identifier: string; password: string; }) {
         // setIsLoading(true);
 
@@ -38,6 +36,7 @@ export function LoginForm() {
             const response = await login({ email: data.identifier, password: data.password }).unwrap();
 
             localStorage.setItem("token", response.token);
+            localStorage.setItem("tokenServices", response.tokenServicioExterno);
             localStorage.setItem("email", response.email);
 
             toast({

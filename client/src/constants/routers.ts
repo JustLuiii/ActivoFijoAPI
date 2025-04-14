@@ -46,6 +46,12 @@ export const OPTION_SIDE_BAR = (pathname: string) => ([
                 href: "/users",
                 isActive: pathname?.startsWith("/users"),
             },
+            {
+                title: "Entradas contable",
+                icon: Building2,
+                href: "/accountant-entrys",
+                isActive: pathname?.startsWith("/accountant-entrys"),
+            }
         ],
     },
     {

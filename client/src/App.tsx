@@ -27,6 +27,10 @@ import { UsersPage } from "./pages/users/users.page"
 import { UsersList } from "./pages/users/users-list"
 import { NewUser } from "./pages/users/new-user"
 import { EditUser } from "./pages/users/edit-user"
+import { AccountantsPage } from "./pages/accountants/accountants-page"
+import { AccountantList } from "./pages/accountants/accountant-list"
+import { NewAccountant } from "./pages/accountants/new-accountant"
+import { EditAccountant } from "./pages/accountants/edit-accountant"
 
 function App() {
   return (
@@ -66,6 +70,11 @@ function App() {
               <Route index element={<UsersList />} />
               <Route path="new" element={<NewUser />} />
               <Route path=":id/edit" element={<EditUser />} />
+            </Route>
+            <Route path="accountant-entrys" element={<AccountantsPage />}>
+              <Route index element={<AccountantList />} />
+              <Route path="new" element={<NewAccountant />} />
+              <Route path=":id/edit" element={<EditAccountant />} />
             </Route>
             <Route path="calculate-depreciation" element={<DepreciationCalculate />} />
           </Route>

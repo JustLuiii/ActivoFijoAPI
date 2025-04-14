@@ -30,6 +30,12 @@ export const endpoints = {
     stadistic: {
         getAll: `estadistica`
     },
+    accountants: {
+        getAll: 'entradaContable',
+        getById: (id: number) => `entradaContable/${id}`,
+        post: 'entradaContable',
+        update: (id?: number) => `entradaContable/${id}`,
+    },
     assetTypes: {
         getAll: 'tiposActivos',
         getById: (id: number) => `tiposActivos/${id}`,

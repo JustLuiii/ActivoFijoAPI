@@ -8,8 +8,11 @@ const baseQuery = fetchBaseQuery({
   baseUrl: DEV ? VITE_VERSION_API : 'http://localhost:3000/api/',
   prepareHeaders: (headers) => {
     const token = localStorage.getItem('token');
+    const tokenServices = localStorage.getItem('tokenServices');
     if (token) {
       headers.set('Authorization', `Bearer ${token}`);
+      headers.set('AuthorizationExterno', `Bearer ${tokenServices}`);
+      headers.set('Content-Type', 'application/json');
     }
     return headers;
   }
@@ -23,6 +26,7 @@ const baseQueryWithReauth = async (args: BaseQueryArgs['args'], api: BaseQueryAr
     if (result.error && result.error.status === 401) {
       console.warn("Token inválido o expirado");
       localStorage.removeItem("token");
+      localStorage.removeItem("tokenServices");
       localStorage.removeItem("email");
     }
 

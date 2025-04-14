@@ -13,6 +13,8 @@
 
     public class EntradaContable
     {
+
+        public int? id { get; set; }
         public string descripcion { get; set; } = string.Empty;
         //Definido en el servicio
         public int sistemaAuxiliarId { get; set; }

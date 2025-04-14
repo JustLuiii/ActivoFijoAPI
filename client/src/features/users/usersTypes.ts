@@ -8,7 +8,8 @@ export interface User {
 
 export type UserResponse = UserLogin & {
   id: number,
-  token: string
+  token: string,
+  tokenServicioExterno: string
 }
 
 export type UserLogin = Pick<User, 'password' | 'email'>

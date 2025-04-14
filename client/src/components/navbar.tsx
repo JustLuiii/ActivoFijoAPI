@@ -12,6 +12,7 @@ export const Navbar = () => {
 
   const handleOnCerrarSession = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("tokenServices");
     localStorage.removeItem("email");
     navigate('/login', { replace: true })
   }

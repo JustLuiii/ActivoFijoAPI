@@ -8,7 +8,7 @@ namespace ActivoFijoAPI.Services
     {
         private readonly HttpClient _httpClient;
         private readonly string _baseUrl = "https://iso810-contabilidad.azurewebsites.net/api/EntradaContable";
-        private const int idSistemaAuxliar = 8; //Activos Fijos
+        private const string idSistemaAuxliar = "67d0a0467da3a3f043d79528"; //Activos Fijos
 
         public EntradaContableService(string token)
         {
@@ -45,7 +45,7 @@ namespace ActivoFijoAPI.Services
         // POST: Crear una nueva entrada contable
         public async Task<bool> CreateAsync(EntradaContable entrada)
         {
-            entrada.sistemaAuxiliarId = idSistemaAuxliar;
+            entrada.sistemaAuxiliarId = 8;
             var json = JsonSerializer.Serialize(entrada);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await _httpClient.PostAsync(_baseUrl, content);
@@ -55,7 +55,7 @@ namespace ActivoFijoAPI.Services
         // PUT: Actualizar una entrada contable existente
         public async Task<bool> UpdateAsync(int id, EntradaContable entrada)
         {
-            entrada.sistemaAuxiliarId = idSistemaAuxliar;
+            entrada.sistemaAuxiliarId = 8;
             var json = JsonSerializer.Serialize(entrada);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await _httpClient.PutAsync($"{_baseUrl}/{id}", content);

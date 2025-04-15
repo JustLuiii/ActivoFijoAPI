@@ -46,7 +46,6 @@ export const EmployeeForm = ({ id }: EmployeeFormProps) => {
             fetchEmployee(parseInt(id))
                 .unwrap()
                 .then((data) => {
-                    console.log(data);
                     setValue('nombre', data.nombre);
                     setValue('id', data.id);
                     setValue('tipoPersona', data.tipoPersona.toString());
@@ -58,7 +57,7 @@ export const EmployeeForm = ({ id }: EmployeeFormProps) => {
         }
     }, [id, reset]);
 
-    const [createEmployee, { isError: isCreateError, error }] = useCreateEmployeesMutation();
+    const [createEmployee, { isError: isCreateError }] = useCreateEmployeesMutation();
     const [updateEmployee, { isError: isUpdateError }] = useUpdateEmployeesMutation();
 
     if (isFetching) return <UILoading variant="spinner" />;
@@ -68,7 +67,6 @@ export const EmployeeForm = ({ id }: EmployeeFormProps) => {
         try {
 
             if (id) {
-                console.log(data);
                 await updateEmployee({ id: employeeId, ...data, activo: data?.activo }).unwrap();
             } else {
                 await createEmployee({ ...data, activo: true }).unwrap();
@@ -80,7 +78,6 @@ export const EmployeeForm = ({ id }: EmployeeFormProps) => {
         }
     };
 
-    console.log(error);
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <Card>

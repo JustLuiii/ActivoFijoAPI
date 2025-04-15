@@ -22,7 +22,7 @@ const schema = z.object({
     descripcion: z.string().min(1, "La descripción es requerida"),
     fechaAsiento: z.string().min(1, "La fecha es requerida"),
     detalles: z.array(z.object({
-        cuentaId: z.union([z.literal(65), z.literal(66)], { required_error: "Cuenta requerida" }),
+        cuentaId: z.union([z.literal(84), z.literal(66)], { required_error: "Cuenta requerida" }),
         tipoMovimiento: z.union([z.literal("DB"), z.literal("CR")], { required_error: "Tipo de movimiento requerido" }),
         montoAsiento: z.number().positive("Debe ser un monto válido")
     })).min(2, "Debe agregar al menos dos cuentas")
@@ -54,7 +54,7 @@ export const AccountantForm = ({ id }: Props) => {
         defaultValues: {
             descripcion: defaultDescription,
             fechaAsiento: currentDate.toISOString().substring(0, 10),
-            detalles: [{ cuentaId: 65, tipoMovimiento: "DB", montoAsiento: 0 }]
+            detalles: [{ cuentaId: 84, tipoMovimiento: "DB", montoAsiento: 0 }]
         }
     });
 
@@ -65,11 +65,19 @@ export const AccountantForm = ({ id }: Props) => {
 
     useEffect(() => {
         if (isEdit && accountant) {
+
+            // const cuentaObject: { [key: string]: 84 | 66 } = {
+            //     ['67fd90f62002022bd9963e7d']: 84,
+            //     ['67cc887594316185bb3b6504']: 66
+            // }
             setValue("descripcion", accountant.descripcion);
-            setValue("fechaAsiento", accountant.fechaAsiento);
+
+            setValue("fechaAsiento", new Date(accountant.fechaAsiento).toISOString().substring(0, 10));
+
             setValue("detalles", accountant.detalles.map(detalle => ({
                 ...detalle,
-                cuentaId: detalle.cuentaId as 65 | 66,
+                // cuentaId: cuentaObject[detalle.cuentaId] as 84 | 66,
+                cuentaId: detalle.cuentaId as 84 | 66,
                 tipoMovimiento: detalle.tipoMovimiento as "DB" | "CR",
             })));
         }
@@ -91,7 +99,6 @@ export const AccountantForm = ({ id }: Props) => {
 
     if (isEdit && isLoadingData) return <UILoading variant="spinner" />;
 
-    console.log(errors.detalles?.root)
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <Card>
@@ -130,7 +137,7 @@ export const AccountantForm = ({ id }: Props) => {
                                                     <SelectValue placeholder="Seleccionar cuenta" />
                                                 </SelectTrigger>
                                                 <SelectContent>
-                                                    <SelectItem value="65">65 - Gasto depreciación</SelectItem>
+                                                    <SelectItem value="84">84 - Gastos Depreciación Activos Fijos</SelectItem>
                                                     <SelectItem value="66">66 - Depreciación acumulada</SelectItem>
                                                 </SelectContent>
                                             </Select>
@@ -197,7 +204,7 @@ export const AccountantForm = ({ id }: Props) => {
                         {typeof errors.detalles?.root?.message === "string" && (
                             <p className="text-sm text-red-500">{errors.detalles?.root?.message}</p>
                         )}
-                        <Button type="button" onClick={() => append({ cuentaId: 65, tipoMovimiento: "DB", montoAsiento: 0 })}>
+                        <Button type="button" onClick={() => append({ cuentaId: 84, tipoMovimiento: "DB", montoAsiento: 0 })}>
                             Agregar Detalle
                         </Button>
 

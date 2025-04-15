@@ -45,7 +45,6 @@ export const AssetForm = ({ id }: AssetFormProps) => {
             fetchAsset(assetId)
                 .unwrap()
                 .then((data) => {
-                    console.log(data);
                     setValue('departamentoId', data.departamentoId.toString());
                     setValue('tipoActivoId', data.tipoActivoId.toString());
                     setValue('fechaAdquisicion', new Date(data.fechaAdquisicion).toISOString().split('T')[0]);
@@ -67,7 +66,6 @@ export const AssetForm = ({ id }: AssetFormProps) => {
         try {
 
             if (id) {
-                console.log(data);
                 await updateAsset({ id: assetId, ...data }).unwrap();
             } else {
                 await createAsset({ ...data }).unwrap();

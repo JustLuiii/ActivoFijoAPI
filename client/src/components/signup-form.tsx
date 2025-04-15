@@ -47,9 +47,7 @@ export function SignupForm() {
 
         try {
 
-            const response = await createUser({ email: data.email, idSistemaAuxiliar: 8, nombre: data.username, password: password }).unwrap();
-
-            console.log("response", response)
+            await createUser({ email: data.email, idSistemaAuxiliar: 8, nombre: data.username, password: password }).unwrap();
 
             toast({ title: "Registro exitoso", description: "Su cuenta ha sido creada correctamente", variant: "default" });
             navigate("/login");

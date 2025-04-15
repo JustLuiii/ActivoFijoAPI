@@ -54,7 +54,6 @@ export const AssetTypeForm = ({ id }: AssetTypeFormProps) => {
         try {
 
             if (id) {
-                console.log(data);
                 await updateAssetTypes({ id: employeeId, ...data, activo: data?.activo }).unwrap();
             } else {
                 await createAssetTypes({ ...data, activo: true }).unwrap();

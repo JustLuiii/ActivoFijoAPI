@@ -158,7 +158,6 @@ export const AssetFilterComponent = ({ onFilter, onReset }: IAssetFilterComponen
                 <Button type="submit">Aplicar Filtros</Button>
                 <Button type="button" className="ml-2" onClick={() => {
                     onReset();
-                    console.log('ssssd')
                     reset({ departamentoId: '', tipoActivoId: '', fechaFin: null, fechaInicio: null })
                 }}>Limpiar</Button>
             </form>

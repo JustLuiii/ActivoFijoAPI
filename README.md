@@ -45,7 +45,6 @@ Actualmente, el proyecto está en fase de desarrollo. Se están implementando la
 🔹 **Mantenimiento y control de estado**
 🔹 **Reportes y análisis de uso**
 
-> 📽 Próximamente: Se incluirán capturas de pantalla y un video demostrativo.
 
 ---
 
@@ -67,8 +66,8 @@ Para clonar el proyecto localmente:
       npm install
       npm run dev
   ```
-
 ---
+> Nota: **Recuerda cambiar el .env.example por .env.local**
 
 ## 🛠 Tecnologías utilizadas
 

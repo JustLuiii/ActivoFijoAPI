@@ -8,7 +8,7 @@ namespace ActivoFijoAPI.Services
     {
         private readonly HttpClient _httpClient;
         private readonly string _baseUrl = "https://iso810-contabilidad.azurewebsites.net/api/EntradaContable";
-        private const string idSistemaAuxliar = "67d0a0467da3a3f043d79528"; //Activos Fijos
+        private const int idSistemaAuxliar = 8; //Activos Fijos - https://eduweb.solitran.com.do/index.php?r=Reporteria/Filareportes
 
         public EntradaContableService(string token)
         {
@@ -19,7 +19,7 @@ namespace ActivoFijoAPI.Services
         // GET: Obtener todas las entradas contables
         public async Task<List<EntradaContable>?> GetAllAsync()
         {
-            var response = await _httpClient.GetAsync($"{_baseUrl}?SistemaAuxiliarId={idSistemaAuxliar}");
+            var response = await _httpClient.GetAsync($"{_baseUrl}");//?SistemaAuxiliarId={idSistemaAuxliar}
             if (response.IsSuccessStatusCode)
             {
                 var json = await response.Content.ReadAsStringAsync();

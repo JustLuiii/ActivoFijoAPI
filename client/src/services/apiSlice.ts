@@ -2,10 +2,10 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 // import { logOut } from '../features/auth/authSlice';
 // import { endpoints } from '@/services/endpoints';
 // import { RootState } from '@/redux/store';
-import { DEV, VITE_VERSION_API } from '@/constants/configs';
+import { DEV, VITE_VERSION_API, VITE_DOMAIN_API } from '@/constants/configs';
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: DEV ? VITE_VERSION_API : 'http://localhost:3000/api/',
+  baseUrl: DEV ? VITE_VERSION_API : VITE_DOMAIN_API + VITE_VERSION_API,
   prepareHeaders: (headers) => {
     const token = localStorage.getItem('token');
     const tokenServices = localStorage.getItem('tokenServices');

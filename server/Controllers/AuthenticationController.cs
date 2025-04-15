@@ -25,6 +25,25 @@ namespace ActivoFijoAPI.Controllers
             _configuration = configuration;
         }
 
+        [HttpGet("prueba")]
+        public async Task<ActionResult<List<Departamento>>> Get() {
+            try
+            {
+                return await _context.Departamentos.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpGet("prueba_valor")]
+        public string GetValor()
+        {
+            return "Hola Mundo";
+        }
+
+
         [HttpPost("registrar")]
         public async Task<ActionResult<UsuarioRespuestaDto>> Registrar(UsuarioRegistroDto registroDto)
         {

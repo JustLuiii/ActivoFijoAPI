@@ -1,7 +1,11 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\client",
+    "\\server",
+    "\\server\\Controllers",
+    "\\server\\Services"
   ],
-  "SelectedNode": "\\C:\\Users\\Enman\\OneDrive\\Documentos\\Server\\Proyectos\\.NET\\Contabilidad\\ActivoFijoAPI",
+  "SelectedNode": "\\server\\Controllers\\DepreciacionController.cs",
   "PreviewInSolutionExplorer": false
 }

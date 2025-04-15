@@ -13,11 +13,11 @@ namespace ActivoFijoAPI.Models
 
         [Column("departamento_id")]
         public int? DepartamentoId { get; set; }
-        public virtual Departamento Departamento { get; set; }
+        public virtual Departamento? Departamento { get; set; }
 
         [Column("tipo_activo_id")]
         public int TipoActivoId { get; set; }
-        public virtual TipoActivo TipoActivo { get; set; }
+        public virtual TipoActivo? TipoActivo { get; set; }
 
         [Column("fecha_adquisicion")]
         public DateTime FechaAdquisicion { get; set; }
@@ -25,6 +25,6 @@ namespace ActivoFijoAPI.Models
 
         [Column("depreciacion_acumulada")]
         public decimal DepreciacionAcumulada { get; set; }
-        public byte Estado { get; set; } // 1: Operativo, 2: Mantenimiento, 3: Baja
+        public int Estado { get; set; } // 1: Operativo, 2: Mantenimiento, 3: Baja
     }
 }

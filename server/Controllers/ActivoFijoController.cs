@@ -25,25 +25,25 @@ namespace ActivoFijoAPI.Controllers
         {
 
             return await _context.ActivosFijos
-     .Include(a => a.TipoActivo)
-     .Include(a => a.Departamento)
-     .Select(a => new ActivoFijoDtos
-     {
-         Id = a.Id, 
-         Descripcion = a.Descripcion,
-         DepartamentoId = a.DepartamentoId,
-         departamento = a.Departamento != null ? a.Departamento.Descripcion : null, 
-         TipoActivoId = a.TipoActivoId,
-         tipoActivo = a.TipoActivo != null ? a.TipoActivo.Descripcion : null, 
-         FechaAdquisicion = a.FechaAdquisicion,
-         Valor = a.Valor,
-         DepreciacionAcumulada = a.DepreciacionAcumulada,
-         Estado = a.Estado,
-         EstadoNombre = a.Estado == 1 ? "Operativo" :
-                        a.Estado == 2 ? "Mantenimiento" :
-                        a.Estado == 3 ? "Baja" : "Desconocido"
-     })
-     .ToListAsync();
+                         .Include(a => a.TipoActivo)
+                         .Include(a => a.Departamento)
+                         .Select(a => new ActivoFijoDtos
+                         {
+                             Id = a.Id, 
+                             Descripcion = a.Descripcion,
+                             DepartamentoId = a.DepartamentoId,
+                             departamento = a.Departamento != null ? a.Departamento.Descripcion : null, 
+                             TipoActivoId = a.TipoActivoId,
+                             tipoActivo = a.TipoActivo != null ? a.TipoActivo.Descripcion : null, 
+                             FechaAdquisicion = a.FechaAdquisicion,
+                             Valor = a.Valor,
+                             DepreciacionAcumulada = a.DepreciacionAcumulada,
+                             Estado = a.Estado,
+                             EstadoNombre = a.Estado == 1 ? "Operativo" :
+                                            a.Estado == 2 ? "Mantenimiento" :
+                                            a.Estado == 3 ? "Baja" : "Desconocido"
+                         })
+                         .ToListAsync();
         }
 
         // GET: api/ActivosFijos/5
@@ -109,8 +109,8 @@ namespace ActivoFijoAPI.Controllers
             {
                 return NotFound();
             }
-            byte inactivo = 0;
-            byte operativo = 1;
+            int inactivo = 0;
+            int operativo = 1;
             //_context.ActivosFijos.Remove(activoFijo);
             activoFijo.Estado = activoFijo.Estado == inactivo ? operativo : inactivo;
             _context.Entry(activoFijo).State = EntityState.Modified;

@@ -61,9 +61,10 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("PermitirTodo", builder =>
     {
-        builder.AllowAnyHeader();
-        builder.AllowAnyOrigin();
-        builder.AllowAnyMethod();
+        builder.WithOrigins("https://clienteactivofijo.z5.web.core.windows.net")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
     });
 });
 
@@ -80,10 +81,8 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.UseCors("PermitirTodo");
 app.UseAuthorization();
-
-
 app.MapControllers();
-
 app.Run();
 

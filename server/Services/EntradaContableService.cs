@@ -8,7 +8,7 @@ namespace ActivoFijoAPI.Services
     {
         private readonly HttpClient _httpClient;
         private readonly string _baseUrl = "https://iso810-contabilidad.azurewebsites.net/api/EntradaContable";
-        private const int idSistemaAuxliar = 8; //Activos Fijos - https://eduweb.solitran.com.do/index.php?r=Reporteria/Filareportes
+        private const int idSistemaAuxliar = 8; //Activos Fijos
 
         public EntradaContableService(string token)
         {

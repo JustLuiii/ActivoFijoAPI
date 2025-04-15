@@ -101,7 +101,7 @@ namespace ActivoFijoAPI.Controllers
                 password = loginDto.Password
             });
 
-            return new UsuarioRespuestaDto { Id = usuario.Id, Nombre = usuario.Nombre, Email = usuario.Email, Token = token, TokenServicioExterno = authContabilidad!.token };
+            return new UsuarioRespuestaDto { Id = usuario.Id, Nombre = usuario.Nombre, Email = usuario.Email, Token = token, TokenServicioExterno = authContabilidad?.token };
         }
 
         private string GenerateJwtToken(Usuario usuario)

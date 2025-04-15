@@ -16,21 +16,29 @@ namespace ActivoFijoAPI.Services
 
         public async Task<LoginResponse?> LoginAsync(LoginRequest loginRequest)
         {
-            var json = JsonSerializer.Serialize(loginRequest);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var response = await _httpClient.PostAsync($"{_baseUrl}/api/autenticacion/login", content);
-
-            if (response.IsSuccessStatusCode)
+            try
             {
-                var result = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<LoginResponse>(result, new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                });
-            }
+                var json = JsonSerializer.Serialize(loginRequest);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            return null;
+                var response = await _httpClient.PostAsync($"{_baseUrl}/api/Autenticacion/login", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsStringAsync();
+                    return JsonSerializer.Deserialize<LoginResponse>(result, new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+                }
+
+                throw new Exception(response.Content.ToString());
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         public async Task<LoginResponse?> RegistrarContabilidadExternoAsync(Usuario usuario, string password)
@@ -52,7 +60,7 @@ namespace ActivoFijoAPI.Services
 
                 var respuesta = await _httpClient.PostAsync($"{_baseUrl}/api/Autenticacion/register", contenido);
 
-                if (!respuesta.IsSuccessStatusCode)
+                if (respuesta.IsSuccessStatusCode)
                 {
                     var result = await respuesta.Content.ReadAsStringAsync();
                     return JsonSerializer.Deserialize<LoginResponse>(result, new JsonSerializerOptions
@@ -61,7 +69,7 @@ namespace ActivoFijoAPI.Services
                     });
                 }
 
-                return null;
+                throw new Exception(respuesta.Content.ToString());
             }
             catch (Exception)
             {
